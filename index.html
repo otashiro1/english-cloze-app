@@ -3,40 +3,34 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>英単語クロース練習アプリ（Lesson 1–6）</title>
+<title>英単語クロース練習アプリ（Lesson 1–6｜一覧＆履歴）</title>
 <style>
-  :root {
-    --bg: #f7f9fc; --panel:#ffffff; --muted:#6b7280; --text:#0f172a; --accent:#2563eb;
-    --ok:#059669; --bad:#dc2626; --chip:#eef2ff; --ring:#e5e7eb;
-  }
-  html, body { height: 100%; }
-  body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, "Hiragino Sans", "Noto Sans JP", sans-serif; color: var(--text); background: linear-gradient(#fff, var(--bg)); }
-  .container { max-width: 900px; margin: 0 auto; padding: 24px; }
+  :root { --bg:#f7f9fc; --panel:#ffffff; --muted:#6b7280; --text:#0f172a; --accent:#2563eb; --ok:#059669; --bad:#dc2626; --ring:#e5e7eb; }
+  html, body { height:100%; }
+  body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, "Hiragino Sans", "Noto Sans JP", sans-serif; color:var(--text); background: linear-gradient(#fff, var(--bg)); }
+  .container { max-width: 980px; margin: 0 auto; padding: 24px; }
   header { display:flex; align-items:center; justify-content:space-between; gap: 16px; margin-bottom:16px; }
   h1 { font-size: 22px; margin: 0; }
   .stats { color: var(--muted); font-size: 13px; }
-  .card { background: var(--panel); border: 1px solid var(--ring); border-radius: 16px; box-shadow: 0 6px 16px rgba(15,23,42,.06); padding: 20px; }
-  .row { display:flex; flex-wrap:wrap; gap: 10px; align-items:center; }
-  .row + .row { margin-top: 12px; }
-  label { font-size: 13px; color: var(--muted); }
-  select, input[type="text"] { border: 1px solid var(--ring); border-radius: 12px; padding: 10px 12px; font-size: 16px; }
-  button { border: 1px solid var(--ring); background: #fff; border-radius: 12px; padding: 9px 12px; font-size: 14px; cursor: pointer; transition: .15s ease; }
+  .toolbar { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+  .card { background: var(--panel); border: 1px solid var(--ring); border-radius: 16px; box-shadow: 0 6px 16px rgba(15,23,42,.06); padding: 16px; }
+  .list { display:grid; grid-template-columns: 1fr; gap: 12px; }
+  .item { border:1px solid var(--ring); border-radius: 14px; padding: 14px; background:#fff; }
+  .item-head { display:flex; gap:8px; justify-content:space-between; align-items:center; margin-bottom:8px; }
+  .idx { font-size: 12px; color: var(--muted); }
+  .cloze { font-size: clamp(18px, 2.6vw, 24px); font-weight: 600; background: #f3f4f6; border-radius: 12px; padding: 10px 12px; line-height: 1.5; }
+  .hint { color: var(--muted); font-size: 13px; margin-top: 4px; }
+  .controls { display:flex; gap:8px; align-items:center; margin-top: 8px; flex-wrap:wrap; }
+  input[type="text"] { border: 1px solid var(--ring); border-radius: 10px; padding: 8px 10px; font-size: 16px; min-width: 260px; flex: 1 1 260px; }
+  button { border: 1px solid var(--ring); background: #fff; border-radius: 10px; padding: 8px 10px; font-size: 14px; cursor: pointer; transition: .15s ease; }
   button:hover { transform: translateY(-1px); box-shadow: 0 6px 12px rgba(0,0,0,.06); }
   .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
-  .btn-ghost { background: #fff; }
   .btn-danger { border-color: #fca5a5; background: #fff5f5; }
-  .hint { color: var(--muted); font-size: 13px; }
-  rt { font-size: 10px; color: #666; }
-  ruby { ruby-position: over; }
-  .cloze { font-size: clamp(20px, 3.2vw, 28px); font-weight: 600; background: #f3f4f6; border-radius: 16px; padding: 16px; line-height: 1.5; }
-  .judge { min-height: 24px; font-size: 14px; font-weight: 600; }
+  .judge { min-height: 20px; font-size: 14px; font-weight: 600; margin-top: 2px; }
   .ok { color: var(--ok); }
   .bad { color: var(--bad); }
+  .meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
   .footer { margin-top: 16px; text-align:center; font-size: 12px; color: var(--muted); }
-  .kbd { background: #f3f4f6; border: 1px solid var(--ring); border-bottom-width: 3px; border-radius: 8px; padding: 2px 8px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; }
-  .divider { height:1px; background: var(--ring); margin: 10px 0; }
-  .accept { font-size: 12px; color: var(--muted); word-break: break-word; }
-  .tiny { font-size: 12px; color: var(--muted); }
 </style>
 </head>
 <body>
@@ -46,89 +40,314 @@
       <div id="stats" class="stats">読み込み中…</div>
     </header>
 
-    <div class="card">
-      <div class="row">
-        <div class="row" style="gap:8px; align-items:center;">
-          <label for="lesson">レッスン</label>
-          <select id="lesson"></select>
-        </div>
-        <div class="row" style="margin-left:auto; gap:8px;">
-          <button id="btn-shuffle" class="btn-ghost" title="順番をランダム化">シャッフル</button>
-          <button id="btn-hint" class="btn-ghost" title="日本語ヒントのON/OFF">和訳ヒント OFF</button>
-          <button id="btn-reset" class="btn-danger" title="このレッスンの成績をリセット">成績リセット</button>
-        </div>
+    <div class="card" style="margin-bottom:14px;">
+      <div class="toolbar">
+        <label for="lesson">レッスン</label>
+        <select id="lesson"></select>
+        <button id="btn-hint" title="日本語ヒントのON/OFF">和訳ヒント OFF</button>
+        <button id="btn-reset" class="btn-danger" title="このレッスンの成績をリセット">成績リセット</button>
       </div>
-
-      <div class="tiny">文中の該当語を自動で「____」に置換します。日本語ヒントでは漢字にふりがなが付きます。</div>
-
-      <div class="row">
-        <div id="cloze" class="cloze">—</div>
-      </div>
-      <div id="hint" class="hint" style="display:none;">ヒント（日）：—</div>
-
-      <div class="row">
-        <input id="answer" type="text" placeholder="英単語（例: brings back / acted out など）" style="flex:1 1 320px" />
-        <button id="btn-check" class="btn-primary">判定</button>
-        <button id="btn-reveal" class="btn-ghost">答えを表示</button>
-        <button id="btn-next" class="btn-ghost">次へ</button>
-      </div>
-
-      <div id="judge" class="judge"></div>
-      <div class="accept" id="accept">受け付ける答え：—</div>
-
-      <div class="divider"></div>
-      <div class="row" style="justify-content:space-between; color: var(--muted); font-size:13px;">
-        <div id="position">—</div>
-        <div><span class="kbd">Enter</span> で判定</div>
-      </div>
+      <div style="color:var(--muted); font-size:12px; margin-top:6px;">※ 複数語の解答は、語数ぶん <strong>____</strong> が並びます（例：<em>in a flash</em> → <strong>____ ____ ____</strong>）。入力欄は語句全体を半角スペースで入力してください。</div>
     </div>
 
-    <div class="footer">データの編集はHTML末尾の <code>LESSONS</code> を更新してください。</div>
+    <div id="list" class="list"></div>
+
+    <div class="footer">データ編集はHTML末尾の <code>LESSONS</code> を更新してください。UTF-8で保存し、ブラウザで開けば動きます。</div>
   </div>
 
 <script>
-const LESSONS = { /* データは省略（前と同じ） */ };
+// ===== Data (Lesson 1–6) =====
+const LESSONS = {
+  "Lesson 1": [
+    { term: "actor",        sentence: "what the actors do on stage",             jp: "俳優が舞台の上ですること" },
+    { term: "brings back",  sentence: "brings back memories",                    jp: "思い出を思い出させる" },
+    { term: "certainly",    sentence: "certainly brings back memories",          jp: "確実に記憶を思い出させる" },
+    { term: "difficult",    sentence: "uses some difficult language",            jp: "難しい言語を使う" },
+    { term: "downstairs",   sentence: "was back downstairs",                     jp: "下の階に戻る" },
+    { term: "dressed",      sentence: "dressed as Romeo",                        jp: "ロミオのような服を着て" },
+    { term: "floor",        sentence: "the living room floor",                   jp: "リビングの床" },
+    { term: "grabbed",      sentence: "grabbed Mom",                             jp: "お母さんを掴んだ" },
+    { term: "in a flash",   sentence: "was back downstairs in a flash",          jp: "あっという間に下の階に戻る" },
+    { term: "language",     sentence: "uses some difficult language",            jp: "難しい言語を使う" },
+    { term: "living room",  sentence: "walking into the living room",            jp: "リビングに歩いて入る" },
+    { term: "memory",       sentence: "brings back memories",                    jp: "記憶を思い出させる" },
+    { term: "pointed",      sentence: "pointed over to the stairs",              jp: "階段の方を指した" },
+    { term: "scene",        sentence: "the balcony scene",                        jp: "バルコニーの場面" },
+    { term: "slowly",       sentence: "slowly walked down the steps",            jp: "ゆっくり階段を降りた" }
+  ],
+  "Lesson 2": [
+    { term: "acted out",    sentence: "acted out the balcony scene",             jp: "場面を演技して見せた" },
+    { term: "actually",     sentence: "were actually in love",                   jp: "実際に恋をしていた" },
+    { term: "basically",    sentence: "basically",                               jp: "基本的に" },
+    { term: "certain",      sentence: "in a certain situation",                  jp: "特定の状況で" },
+    { term: "character",    sentence: "how your character would feel",           jp: "登場人物がどう感じるか" },
+    { term: "emotion",      sentence: "show real emotion",                       jp: "実際の感情を見せる" },
+    { term: "explained",    sentence: "dad explained",                           jp: "お父さんが説明した" },
+    { term: "feel",         sentence: "how your character would feel",           jp: "登場人物がどう感じるか" },
+    { term: "kept",         sentence: "kept the costumes",                       jp: "衣装を保管した" },
+    { term: "pretended",    sentence: "pretended to date",                       jp: "デートするふりをした" },
+    { term: "realized",     sentence: "realized at once",                        jp: "すぐに気づいた" },
+    { term: "reminds",      sentence: "reminds us",                              jp: "思い起こさせる" },
+    { term: "romantic",     sentence: "seem romantic",                           jp: "ロマンチックに見える" },
+    { term: "run off",      sentence: "run off",                                 jp: "逃げる" },
+    { term: "technique",    sentence: "a technique called method acting",        jp: "メソッド演技と呼ばれる技術" }
+  ],
+  "Lesson 3": [
+    { term: "ancient",      sentence: "Ancient Greece",                          jp: "古代ギリシャ" },
+    { term: "attend",       sentence: "attend a party",                          jp: "パーティーに参加する" },
+    { term: "culture",      sentence: "vary from culture to culture",            jp: "文化によって異なる" },
+    { term: "evil",         sentence: "an evil daughter",                        jp: "邪悪な娘" },
+    { term: "fairy tale",   sentence: "one of many fairy tales",                 jp: "多くのおとぎ話の中の1つ" },
+    { term: "lap",          sentence: "into the lap of the pharaoh",             jp: "ファラオの膝に" },
+    { term: "marries",      sentence: "marries the pharaoh",                     jp: "ファラオと結婚する" },
+    { term: "modern",       sentence: "in the modern Cinderella story",          jp: "現代のシンデレラストーリー" },
+    { term: "owner",        sentence: "looks for its owner",                     jp: "持ち主を探す" },
+    { term: "plot",         sentence: "the setting, characters, and plot",       jp: "背景、登場人物、あらすじ" },
+    { term: "remarries",    sentence: "remarries after her mother dies",         jp: "母の死後に再婚する" },
+    { term: "setting",      sentence: "the setting, characters, and plot",       jp: "背景、登場人物、あらすじ" },
+    { term: "slave",        sentence: "a slave in Egypt",                        jp: "エジプトの奴隷" },
+    { term: "theme",        sentence: "the basic themes",                        jp: "基本の主題" },
+    { term: "vary",         sentence: "vary from culture to culture",            jp: "文化によって異なる" }
+  ],
+  "Lesson 4": [
+    { term: "adult",        sentence: "adult",                                   jp: "大人" },
+    { term: "belong to",    sentence: "belong to a human",                       jp: "人間に属する" },
+    { term: "continent",    sentence: "continents crashing together",            jp: "大陸の衝突と合体" },
+    { term: "crash",        sentence: "continents crashing together",            jp: "大陸の衝突と合体" },
+    { term: "depends on",   sentence: "depends on the mountains",                jp: "山による" },
+    { term: "edge",         sentence: "the edges of the continents",             jp: "大陸の端" },
+    { term: "evidence",     sentence: "no evidence of any Yetis",                jp: "雪男の証拠なし" },
+    { term: "fold",         sentence: "fold upward",                             jp: "上に向かって折れる" },
+    { term: "footprint",    sentence: "a set of footprints",                     jp: "一組の足跡" },
+    { term: "monster",      sentence: "ape-like snow monsters",                  jp: "類人猿のような雪の怪物" },
+    { term: "result",       sentence: "result",                                  jp: "結果" },
+    { term: "shifted",      sentence: "shifted and crashed into Eurasia",        jp: "ユーラシアにぶつかった" },
+    { term: "stranger",     sentence: "stranger",                                jp: "見知らぬ人" },
+    { term: "surprising",   sentence: "the most surprising thing about the Himalayas", jp: "ヒマラヤで最も驚くべきこと" },
+    { term: "trail",        sentence: "started up a trail",                      jp: "登山路を登り始めた" }
+  ],
+  "Lesson 5": [
+    { term: "bottom",       sentence: "on the bottom",                           jp: "底に" },
+    { term: "cabin",        sentence: "a small cabin",                           jp: "小さな小屋" },
+    { term: "confused",     sentence: "looked confused",                         jp: "慌てたように見えた" },
+    { term: "earthquake",   sentence: "a minor earthquake",                      jp: "軽い地震" },
+    { term: "explanation",  sentence: "for an explanation",                      jp: "説明を求める" },
+    { term: "hard",         sentence: "shook so hard",                           jp: "非常にひどく揺れた" },
+    { term: "head",         sentence: "head back",                               jp: "戻る" },
+    { term: "held on to",   sentence: "held on to Brandon tightly",              jp: "Brandonをぎゅっと掴んだ" },
+    { term: "investigate",  sentence: "we'd better investigate",                 jp: "調査した方が良い" },
+    { term: "minor",        sentence: "a minor earthquake",                      jp: "軽い地震" },
+    { term: "pair",         sentence: "a pair of boots",                         jp: "一足の長靴" },
+    { term: "shook",        sentence: "shook so hard",                           jp: "非常にひどく揺れた" },
+    { term: "trick",        sentence: "I tricked you",                           jp: "君を騙した" },
+    { term: "whole",        sentence: "a whole family",                          jp: "一家全体" },
+    { term: "wooden",       sentence: "wooden footprints",                       jp: "木でできた足跡" }
+  ],
+  "Lesson 6": [
+    { term: "announcement", sentence: "an important announcement",               jp: "重要な発表" },
+    { term: "emergency",    sentence: "the fire drill emergency plan",           jp: "消防訓練の緊急計画" },
+    { term: "evacuate",     sentence: "evacuate the building",                   jp: "建物から避難する" },
+    { term: "exit",         sentence: "exit the building",                       jp: "建物を出る" },
+    { term: "important",    sentence: "an important announcement",               jp: "重要な発表" },
+    { term: "plan",         sentence: "the fire drill emergency plan",           jp: "消防訓緊急計画" },
+    { term: "possible",     sentence: "as much as possible",                     jp: "できるだけ多く" },
+    { term: "prepare",      sentence: "prepare for",                             jp: "備える" },
+    { term: "safely",       sentence: "exit the building safely",                jp: "安全に建物を出る" },
+    { term: "signal",       sentence: "wait for my signal",                      jp: "私の信号を待つ" },
+    { term: "sink",         sentence: "get under a sink",                        jp: "洗面台の下に入る" },
+    { term: "strong",       sentence: "the strongest parts of the building",     jp: "建物の最も丈夫な部分" },
+    { term: "try",          sentence: "give it a try",                           jp: "試してみる" },
+    { term: "under",        sentence: "get under a desk",                        jp: "机の下に入る" },
+    { term: "warning",      sentence: "without warning",                         jp: "警告なく" }
+  ]
+};
 
-function kanaize(text){
-  return text
-    .replace(/俳優/g,'<ruby>俳優<rt>はいゆう</rt></ruby>')
-    .replace(/舞台/g,'<ruby>舞台<rt>ぶたい</rt></ruby>')
-    .replace(/記憶/g,'<ruby>記憶<rt>きおく</rt></ruby>')
-    .replace(/言語/g,'<ruby>言語<rt>げんご</rt></ruby>')
-    .replace(/階/g,'<ruby>階<rt>かい</rt></ruby>')
-    .replace(/服/g,'<ruby>服<rt>ふく</rt></ruby>')
-    .replace(/床/g,'<ruby>床<rt>ゆか</rt></ruby>')
-    .replace(/掴/g,'<ruby>掴<rt>つか</rt></ruby>')
-    .replace(/場面/g,'<ruby>場面<rt>ばめん</rt></ruby>')
-    .replace(/階段/g,'<ruby>階段<rt>かいだん</rt></ruby>')
-    .replace(/登場人物/g,'<ruby>登場人物<rt>とうじょうじんぶつ</rt></ruby>')
-    .replace(/状況/g,'<ruby>状況<rt>じょうきょう</rt></ruby>')
-    .replace(/技術/g,'<ruby>技術<rt>ぎじゅつ</rt></ruby>')
-    .replace(/文化/g,'<ruby>文化<rt>ぶんか</rt></ruby>')
-    .replace(/娘/g,'<ruby>娘<rt>むすめ</rt></ruby>')
-    .replace(/奴隷/g,'<ruby>奴隷<rt>どれい</rt></ruby>')
-    .replace(/大陸/g,'<ruby>大陸<rt>たいりく</rt></ruby>')
-    .replace(/証拠/g,'<ruby>証拠<rt>しょうこ</rt></ruby>')
-    .replace(/結果/g,'<ruby>結果<rt>けっか</rt></ruby>')
-    .replace(/驚/g,'<ruby>驚<rt>おどろ</rt></ruby>')
-    .replace(/地震/g,'<ruby>地震<rt>じしん</rt></ruby>')
-    .replace(/説明/g,'<ruby>説明<rt>せつめい</rt></ruby>')
-    .replace(/建物/g,'<ruby>建物<rt>たてもの</rt></ruby>')
-    .replace(/発表/g,'<ruby>発表<rt>はっぴょう</rt></ruby>')
-    .replace(/計画/g,'<ruby>計画<rt>けいかく</rt></ruby>')
-    .replace(/安全/g,'<ruby>安全<rt>あんぜん</rt></ruby>')
-    .replace(/信号/g,'<ruby>信号<rt>しんごう</rt></ruby>')
-    .replace(/警告/g,'<ruby>警告<rt>けいこく</rt></ruby>');
+// ===== Utilities =====
+const $ = (sel) => document.querySelector(sel);
+const LS_KEY_LESSON = 'cloze-app-lesson-stats-v2'; // レッスン集計
+const LS_KEY_ITEMS  = 'cloze-app-item-attempts-v2'; // 問題ごとの実施履歴
+function normalize(s){return s.toLowerCase().replace(/\s+/g,' ').trim();}
+function escapeRegExp(s){return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');}
+function todayISO(){ const d = new Date(); const tz = new Date(d.getTime()-d.getTimezoneOffset()*60000); return tz.toISOString().slice(0,10); }
+function countWords(phrase){ return normalize(phrase).split(' ').length; }
+function blanksFor(phrase){ return Array.from({length: countWords(phrase)}, ()=>'____').join(' '); }
+
+function buildAcceptableAnswers(base){
+  const b = normalize(base);
+  if (b.includes(' ')){
+    const parts = b.split(' ');
+    const last = parts[parts.length-1];
+    const set = new Set([b]);
+    const sForm = last.endsWith('s') ? last : last + 's';
+    set.add([...parts.slice(0,-1), sForm].join(' '));
+    return [...set];
+  }
+  const set = new Set([b]);
+  if (!b.endsWith('s')) set.add(b+'s');
+  if (!b.endsWith('es')) set.add(b+'es');
+  if (!b.endsWith('ed')) set.add(b+'ed');
+  if (!b.endsWith('ing')) set.add(b+'ing');
+  return [...set];
 }
 
-function renderHint(text){ return 'ヒント（日）：' + kanaize(text); }
-
-function render(){
-  const cur = LESSONS[state.lesson][state.index];
-  const hint = $('#hint');
-  hint.style.display = state.showHint ? '' : 'none';
-  hint.innerHTML = renderHint(cur.jp);
+function makeCloze(sentence, base){
+  const variants = buildAcceptableAnswers(base).sort((a,b)=>b.length-a.length);
+  const multi = countWords(base) > 1;
+  const replacement = multi ? blanksFor(base) : '____';
+  let out = sentence, replaced=false;
+  for (const v of variants){
+    const re = new RegExp(`\\b${escapeRegExp(v)}\\b`, 'i');
+    if (re.test(out)) { out = out.replace(re, replacement); replaced=true; break; }
+  }
+  if (!replaced) out = `${sentence} (${replacement})`;
+  return { text: out, replaced };
 }
+
+function load(key, fallback){ try{ return JSON.parse(localStorage.getItem(key)||JSON.stringify(fallback)); }catch{ return fallback; } }
+function save(key, obj){ localStorage.setItem(key, JSON.stringify(obj)); }
+
+// ===== State =====
+const state = {
+  lesson: Object.keys(LESSONS)[0],
+  showHint: false,
+  lessonStats: load(LS_KEY_LESSON, {}),
+  itemAttempts: load(LS_KEY_ITEMS, {}), // { problemId: [{date, correct}] }
+};
+
+function problemId(lesson, item){ return `${lesson}::${item.term}::${item.sentence}`; }
+
+// ===== Init =====
+function init(){
+  const sel = $('#lesson');
+  Object.keys(LESSONS).forEach(k=>{ const o=document.createElement('option'); o.value=k; o.textContent=k; sel.appendChild(o); });
+  sel.value = state.lesson;
+
+  sel.addEventListener('change', ()=>{ state.lesson = sel.value; renderList(); renderHeader(); });
+  $('#btn-hint').addEventListener('click', ()=>{ state.showHint=!state.showHint; renderList(); renderHeader(); });
+  $('#btn-reset').addEventListener('click', ()=>{ state.lessonStats[state.lesson] = { total:0, correct:0 }; save(LS_KEY_LESSON, state.lessonStats); renderHeader(); });
+
+  renderList();
+  renderHeader();
+}
+
+function renderHeader(){
+  $('#stats').textContent = `${state.lesson}｜正答率 ${lessonProgressRate()}`;
+  $('#btn-hint').textContent = state.showHint ? '和訳ヒント ON' : '和訳ヒント OFF';
+}
+
+function lessonProgressRate(){
+  const rec = state.lessonStats[state.lesson];
+  if (!rec || rec.total===0) return '—';
+  return `${Math.round(rec.correct/rec.total*100)}% (${rec.correct}/${rec.total})`;
+}
+
+function itemStatsText(lesson, item){
+  const id = problemId(lesson, item);
+  const arr = state.itemAttempts[id] || [];
+  if (arr.length === 0) return 'この問題の履歴：—';
+  const total = arr.length;
+  const correct = arr.filter(a=>a.correct).length;
+  const rate = Math.round(correct/total*100);
+  const last = arr[arr.length-1].date;
+  const since = new Date(); since.setDate(since.getDate()-6);
+  const cutoff = since.toISOString().slice(0,10);
+  const w7 = arr.filter(a=> a.date >= cutoff);
+  const w7Total = w7.length;
+  const w7Correct = w7.filter(a=>a.correct).length;
+  const w7Rate = w7Total ? Math.round(w7Correct/w7Total*100) : '—';
+  return `この問題の正答率：${rate}% (${correct}/${total})｜直近7日：${w7Rate}${w7Total?`% (${w7Correct}/${w7Total})`:''}｜最終実施日：${last}`;
+}
+
+function renderList(){
+  const container = $('#list');
+  container.innerHTML = '';
+  const items = LESSONS[state.lesson];
+
+  items.forEach((it, idx)=>{
+    const wrap = document.createElement('div');
+    wrap.className = 'item';
+
+    const head = document.createElement('div');
+    head.className = 'item-head';
+    head.innerHTML = `<div class="idx">#${idx+1}</div>`;
+
+    const cloze = document.createElement('div');
+    cloze.className = 'cloze';
+    cloze.textContent = makeCloze(it.sentence, it.term).text;
+
+    const hint = document.createElement('div');
+    hint.className = 'hint';
+    hint.style.display = state.showHint ? '' : 'none';
+    hint.textContent = `ヒント（日）：${it.jp}`;
+
+    const controls = document.createElement('div');
+    controls.className = 'controls';
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.placeholder = '解答（例: in a flash）';
+    input.id = `ans-${idx}`;
+
+    const btnCheck = document.createElement('button');
+    btnCheck.className = 'btn-primary';
+    btnCheck.textContent = '判定';
+    btnCheck.addEventListener('click', ()=>check(idx));
+
+    const btnReveal = document.createElement('button');
+    btnReveal.textContent = '答えを表示';
+    btnReveal.addEventListener('click', ()=>{ input.value = it.term; setJudge(idx, true, false); renderHeader(); });
+
+    controls.append(input, btnCheck, btnReveal);
+
+    const judge = document.createElement('div');
+    judge.className = 'judge';
+    judge.id = `judge-${idx}`;
+
+    const meta = document.createElement('div');
+    meta.className = 'meta';
+    meta.id = `meta-${idx}`;
+    meta.textContent = itemStatsText(state.lesson, it);
+
+    wrap.append(head, cloze, hint, controls, judge, meta);
+    container.appendChild(wrap);
+
+    input.addEventListener('keydown', (e)=>{ if (e.key==='Enter') check(idx); });
+  });
+}
+
+function setJudge(idx, isCorrect, record=true){
+  const judge = document.getElementById(`judge-${idx}`);
+  judge.className = 'judge';
+  if (isCorrect){ judge.textContent = '正解！よくできました。'; judge.classList.add('ok'); }
+  else { judge.textContent = `不正解…`; judge.classList.add('bad'); }
+
+  if (!record) return; // 答え表示時は記録しない
+
+  // 集計（レッスン）
+  const rec = state.lessonStats[state.lesson] || { total:0, correct:0 };
+  rec.total += 1; rec.correct += isCorrect ? 1 : 0; state.lessonStats[state.lesson] = rec; save(LS_KEY_LESSON, state.lessonStats);
+
+  // 履歴（問題）
+  const item = LESSONS[state.lesson][idx];
+  const id = problemId(state.lesson, item);
+  const arr = state.itemAttempts[id] || [];
+  arr.push({ date: todayISO(), correct: isCorrect });
+  state.itemAttempts[id] = arr; save(LS_KEY_ITEMS, state.itemAttempts);
+
+  // メタ更新
+  const meta = document.getElementById(`meta-${idx}`);
+  meta.textContent = itemStatsText(state.lesson, item);
+}
+
+function check(idx){
+  const input = document.getElementById(`ans-${idx}`);
+  const it = LESSONS[state.lesson][idx];
+  const ans = normalize(input.value);
+  const ok = buildAcceptableAnswers(it.term).includes(ans);
+  setJudge(idx, ok, true);
+  renderHeader();
+}
+
+document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
