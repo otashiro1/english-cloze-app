@@ -340,11 +340,15 @@ function setJudge(idx, isCorrect, record=true){
 
 function check(idx){
   const input = document.getElementById(`ans-${idx}`);
+  if (input.dataset.locked === "true") return; // ← 追加：連打防止
+  input.dataset.locked = "true"; // ← 追加：この入力をロック
   const it = LESSONS[state.lesson][idx];
   const ans = normalize(input.value);
   const ok = buildAcceptableAnswers(it.term).includes(ans);
   setJudge(idx, ok, true);
   renderHeader();
+  // 入力が変更されたらロック解除
+  input.addEventListener('input', () => { input.dataset.locked = "false"; }, { once: true });
 }
 
 document.addEventListener('DOMContentLoaded', init);
