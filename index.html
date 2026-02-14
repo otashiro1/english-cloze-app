@@ -3,51 +3,445 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>英単語クロース練習アプリ（Lesson 1–6｜一覧＆履歴）</title>
+<title>🎓 British Summer School Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-  :root { --bg:#f7f9fc; --panel:#ffffff; --muted:#6b7280; --text:#0f172a; --accent:#2563eb; --ok:#059669; --bad:#dc2626; --ring:#e5e7eb; }
-  html, body { height:100%; }
-  body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, "Hiragino Sans", "Noto Sans JP", sans-serif; color:var(--text); background: linear-gradient(#fff, var(--bg)); }
-  .container { max-width: 980px; margin: 0 auto; padding: 24px; }
-  header { display:flex; align-items:center; justify-content:space-between; gap: 16px; margin-bottom:16px; }
-  h1 { font-size: 22px; margin: 0; }
-  .stats { color: var(--muted); font-size: 13px; }
-  .toolbar { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
-  .card { background: var(--panel); border: 1px solid var(--ring); border-radius: 16px; box-shadow: 0 6px 16px rgba(15,23,42,.06); padding: 16px; }
-  .list { display:grid; grid-template-columns: 1fr; gap: 12px; }
-  .item { border:1px solid var(--ring); border-radius: 14px; padding: 14px; background:#fff; }
-  .item-head { display:flex; gap:8px; justify-content:space-between; align-items:center; margin-bottom:8px; }
-  .idx { font-size: 12px; color: var(--muted); }
-  .cloze { font-size: clamp(18px, 2.6vw, 24px); font-weight: 600; background: #f3f4f6; border-radius: 12px; padding: 10px 12px; line-height: 1.5; }
-  .hint { color: var(--muted); font-size: 13px; margin-top: 4px; }
-  .controls { display:flex; gap:8px; align-items:center; margin-top: 8px; flex-wrap:wrap; }
-  input[type="text"] { border: 1px solid var(--ring); border-radius: 10px; padding: 8px 10px; font-size: 16px; min-width: 260px; flex: 1 1 260px; }
-  button { border: 1px solid var(--ring); background: #fff; border-radius: 10px; padding: 8px 10px; font-size: 14px; cursor: pointer; transition: .15s ease; }
-  button:hover { transform: translateY(-1px); box-shadow: 0 6px 12px rgba(0,0,0,.06); }
-  .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
-  .btn-danger { border-color: #fca5a5; background: #fff5f5; }
-  .judge { min-height: 20px; font-size: 14px; font-weight: 600; margin-top: 2px; }
-  .ok { color: var(--ok); }
-  .bad { color: var(--bad); }
-  .meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
-  .footer { margin-top: 16px; text-align:center; font-size: 12px; color: var(--muted); }
+  /* ===== Design Tokens ===== */
+  :root {
+    --navy: #1b2a4a;
+    --navy-light: #263b65;
+    --gold: #d4a843;
+    --gold-bright: #f0c75e;
+    --cream: #faf6ed;
+    --red: #b5303f;
+    --green: #1ea362;
+    --green-light: #d0f5e0;
+    --red-light: #fde2e4;
+    --panel: #ffffff;
+    --muted: #7a8599;
+    --text: #1b2a4a;
+    --ring: #d6dbe6;
+    --shadow: rgba(27,42,74,.12);
+  }
+
+  /* ===== Reset & Base ===== */
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+    color: var(--text);
+    background: linear-gradient(135deg, #1b2a4a 0%, #263b65 40%, #1b2a4a 100%);
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Subtle Union Jack diagonal stripes */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      linear-gradient(30deg, transparent 48.5%, rgba(181,48,63,.06) 48.5%, rgba(181,48,63,.06) 51.5%, transparent 51.5%),
+      linear-gradient(-30deg, transparent 48.5%, rgba(181,48,63,.06) 48.5%, rgba(181,48,63,.06) 51.5%, transparent 51.5%),
+      linear-gradient(0deg, transparent 48%, rgba(255,255,255,.03) 48%, rgba(255,255,255,.03) 52%, transparent 52%),
+      linear-gradient(90deg, transparent 48%, rgba(255,255,255,.03) 48%, rgba(255,255,255,.03) 52%, transparent 52%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container { max-width: 900px; margin: 0 auto; padding: 20px; position: relative; z-index: 1; }
+
+  /* ===== Header ===== */
+  header {
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 28px 20px 18px;
+    background: linear-gradient(135deg, var(--navy-light), var(--navy));
+    border-radius: 24px;
+    border: 2px solid var(--gold);
+    box-shadow: 0 8px 32px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.08);
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 30%, rgba(212,168,67,.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  h1 {
+    font-family: 'Fredoka', 'Outfit', sans-serif;
+    font-size: clamp(26px, 5vw, 40px);
+    font-weight: 700;
+    margin: 0 0 4px;
+    color: var(--gold-bright);
+    text-shadow: 0 2px 8px rgba(0,0,0,.3);
+    letter-spacing: 0.5px;
+  }
+  .subtitle {
+    font-size: 14px;
+    color: rgba(255,255,255,.6);
+    margin-bottom: 10px;
+  }
+  #stats {
+    display: inline-block;
+    color: #fff;
+    font-size: 14px;
+    background: rgba(255,255,255,.1);
+    padding: 6px 18px;
+    border-radius: 20px;
+    backdrop-filter: blur(4px);
+  }
+  .streak-display {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, #ff6b35, #ff4500);
+    color: #fff;
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-left: 8px;
+    box-shadow: 0 2px 12px rgba(255,69,0,.3);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .streak-display.mega {
+    background: linear-gradient(135deg, #ff4500, #ff0080, #ff4500);
+    background-size: 200% 200%;
+    animation: megaStreak 1s ease infinite;
+    box-shadow: 0 2px 20px rgba(255,0,128,.4);
+    transform: scale(1.1);
+  }
+  @keyframes megaStreak { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
+
+  /* ===== Toolbar ===== */
+  .toolbar-card {
+    background: var(--panel);
+    border-radius: 18px;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 16px var(--shadow);
+    border: 1px solid var(--ring);
+  }
+  .toolbar {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .toolbar label {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--navy);
+  }
+  select {
+    border: 2px solid var(--ring);
+    border-radius: 12px;
+    padding: 8px 12px;
+    font-size: 15px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    background: #fff;
+    color: var(--navy);
+    cursor: pointer;
+    transition: border-color .2s;
+  }
+  select:focus { outline: none; border-color: var(--gold); }
+  .toolbar-note {
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+
+  /* ===== Buttons ===== */
+  button {
+    border: 2px solid var(--ring);
+    background: #fff;
+    border-radius: 12px;
+    padding: 8px 14px;
+    font-size: 14px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  button:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,.1); }
+  button:active { transform: translateY(0); }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--navy), var(--navy-light));
+    color: var(--gold-bright);
+    border-color: var(--gold);
+    font-size: 15px;
+    padding: 10px 22px;
+    letter-spacing: .5px;
+  }
+  .btn-primary:hover {
+    background: linear-gradient(135deg, var(--navy-light), #2f4d80);
+    box-shadow: 0 6px 20px rgba(212,168,67,.3);
+  }
+  .btn-danger { border-color: #fca5a5; background: #fff5f5; color: var(--red); }
+  .btn-danger:hover { background: #fee; }
+
+  /* ===== Question List ===== */
+  .list { display: grid; grid-template-columns: 1fr; gap: 14px; }
+
+  .item {
+    background: var(--panel);
+    border: 2px solid var(--ring);
+    border-radius: 20px;
+    padding: 18px 20px;
+    box-shadow: 0 4px 16px var(--shadow);
+    transition: all .3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .item::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 6px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--gold), var(--gold-bright));
+    border-radius: 20px 0 0 20px;
+  }
+  .item:hover { transform: translateY(-3px); box-shadow: 0 8px 28px var(--shadow); }
+
+  .item-head {
+    display: flex;
+    gap: 8px;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .idx {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--navy), var(--navy-light));
+    color: var(--gold-bright);
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .cloze {
+    font-size: clamp(18px, 2.6vw, 24px);
+    font-weight: 600;
+    background: linear-gradient(135deg, #f8f6f0, #f0ece0);
+    border-radius: 14px;
+    padding: 14px 16px;
+    line-height: 1.6;
+    border: 1px solid #e8e0d0;
+    color: var(--navy);
+  }
+  .hint {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 6px;
+    font-style: italic;
+  }
+
+  /* ===== Controls ===== */
+  .controls { display: flex; gap: 10px; align-items: center; margin-top: 12px; flex-wrap: wrap; }
+  input[type="text"] {
+    border: 2px solid var(--ring);
+    border-radius: 14px;
+    padding: 12px 16px;
+    font-size: 17px;
+    font-family: 'Outfit', sans-serif;
+    min-width: 240px;
+    flex: 1 1 240px;
+    transition: border-color .2s, box-shadow .2s;
+    color: var(--navy);
+  }
+  input[type="text"]:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 0 4px rgba(212,168,67,.15);
+  }
+  input[type="text"]::placeholder { color: #b0b8c8; }
+
+  /* ===== Judge ===== */
+  .judge {
+    min-height: 24px;
+    font-size: 15px;
+    font-weight: 700;
+    margin-top: 6px;
+    font-family: 'Fredoka', sans-serif;
+    transition: all .3s;
+  }
+  .ok {
+    color: var(--green);
+    animation: judgePopIn .4s cubic-bezier(.175,.885,.32,1.275);
+  }
+  .bad {
+    color: var(--red);
+  }
+  @keyframes judgePopIn {
+    0% { opacity:0; transform:scale(.5) translateY(10px); }
+    100% { opacity:1; transform:scale(1) translateY(0); }
+  }
+
+  .meta {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* ===== Correct State ===== */
+  .item.correct-flash {
+    border-color: var(--green);
+    background: linear-gradient(135deg, #f0fff6, #e6faf0);
+    animation: correctPulse .6s ease;
+  }
+  .item.correct-flash::before {
+    background: linear-gradient(180deg, var(--green), #34d399);
+  }
+  @keyframes correctPulse {
+    0% { box-shadow: 0 0 0 0 rgba(30,163,98,.4); }
+    50% { box-shadow: 0 0 0 12px rgba(30,163,98,0); }
+    100% { box-shadow: 0 4px 16px var(--shadow); }
+  }
+
+  /* ===== Wrong Shake ===== */
+  .item.wrong-shake {
+    animation: shake .5s ease;
+    border-color: var(--red);
+  }
+  @keyframes shake {
+    0%,100% { transform:translateX(0); }
+    15% { transform:translateX(-8px); }
+    30% { transform:translateX(8px); }
+    45% { transform:translateX(-6px); }
+    60% { transform:translateX(6px); }
+    75% { transform:translateX(-3px); }
+    90% { transform:translateX(3px); }
+  }
+
+  /* ===== Celebration Overlay ===== */
+  .celebration-text {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    font-family: 'Fredoka', sans-serif;
+    font-size: clamp(48px, 10vw, 90px);
+    font-weight: 700;
+    color: var(--gold-bright);
+    text-shadow:
+      0 0 20px rgba(240,199,94,.6),
+      0 4px 12px rgba(0,0,0,.4),
+      0 0 60px rgba(240,199,94,.3);
+    z-index: 9999;
+    pointer-events: none;
+    white-space: nowrap;
+    animation: celebZoom 1.8s cubic-bezier(.175,.885,.32,1.275) forwards;
+  }
+  @keyframes celebZoom {
+    0% { transform: translate(-50%, -50%) scale(0) rotate(-10deg); opacity:0; }
+    20% { transform: translate(-50%, -50%) scale(1.2) rotate(3deg); opacity:1; }
+    35% { transform: translate(-50%, -50%) scale(1) rotate(0); opacity:1; }
+    75% { transform: translate(-50%, -50%) scale(1) rotate(0); opacity:1; }
+    100% { transform: translate(-50%, -50%) scale(1.5) rotate(5deg); opacity:0; }
+  }
+
+  /* ===== Mega Celebration (5-streak) ===== */
+  .mega-celebration-text {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    font-family: 'Fredoka', sans-serif;
+    font-size: clamp(36px, 8vw, 72px);
+    font-weight: 700;
+    text-align: center;
+    background: linear-gradient(90deg, #ff0080, #ff8c00, #40e0d0, #ff0080);
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,.3));
+    z-index: 9999;
+    pointer-events: none;
+    animation: megaCelebZoom 2.5s cubic-bezier(.175,.885,.32,1.275) forwards,
+               rainbowShift 1s linear infinite;
+  }
+  @keyframes megaCelebZoom {
+    0% { transform: translate(-50%, -50%) scale(0) rotate(-15deg); opacity:0; }
+    15% { transform: translate(-50%, -50%) scale(1.3) rotate(5deg); opacity:1; }
+    30% { transform: translate(-50%, -50%) scale(1) rotate(0); opacity:1; }
+    80% { transform: translate(-50%, -50%) scale(1) rotate(0); opacity:1; }
+    100% { transform: translate(-50%, -50%) scale(2) rotate(10deg); opacity:0; }
+  }
+  @keyframes rainbowShift { 0%{background-position:0% 50%} 100%{background-position:100% 50%} }
+
+  /* ===== Confetti Canvas ===== */
+  #confetti-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9998;
+  }
+
+  /* ===== Footer ===== */
+  .footer {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 12px;
+    color: rgba(255,255,255,.4);
+    padding-bottom: 16px;
+  }
+  .footer code { background: rgba(255,255,255,.1); padding: 2px 6px; border-radius: 4px; }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 600px) {
+    .container { padding: 12px; }
+    header { padding: 20px 14px 14px; }
+    .item { padding: 14px 14px 14px 18px; }
+    .controls { flex-direction: column; }
+    input[type="text"] { min-width: 100%; flex: 1 1 100%; }
+    .streak-display { margin-left: 0; margin-top: 6px; }
+  }
 </style>
 </head>
 <body>
+  <canvas id="confetti-canvas"></canvas>
+
   <div class="container">
     <header>
-      <h1>英単語クロース練習アプリ</h1>
-      <div id="stats" class="stats">読み込み中…</div>
+      <h1>🎓 British Summer School Quiz</h1>
+      <div class="subtitle">— English Vocabulary Challenge —</div>
+      <div>
+        <span id="stats">読み込み中…</span>
+        <span id="streak-badge" class="streak-display" style="display:none;">🔥 <span id="streak-count">0</span></span>
+      </div>
     </header>
 
-    <div class="card" style="margin-bottom:14px;">
+    <div class="toolbar-card">
       <div class="toolbar">
-        <label for="lesson">レッスン</label>
+        <label for="lesson">📚 Lesson</label>
         <select id="lesson"></select>
-        <button id="btn-hint" title="日本語ヒントのON/OFF">和訳ヒント OFF</button>
-        <button id="btn-reset" class="btn-danger" title="このレッスンの成績をリセット">成績リセット</button>
+        <button id="btn-hint" title="日本語ヒントのON/OFF">💡 Hint OFF</button>
+        <button id="btn-reset" class="btn-danger" title="このレッスンの成績をリセット">🗑 Reset</button>
       </div>
-      <div style="color:var(--muted); font-size:12px; margin-top:6px;">※ 複数語の解答は、語数ぶん <strong>____</strong> が並びます（例：<em>in a flash</em> → <strong>____ ____ ____</strong>）。入力欄は語句全体を半角スペースで入力してください。</div>
+      <div class="toolbar-note">※ 複数語の解答は、語数ぶん <strong>____</strong> が並びます（例：<em>in a flash</em> → <strong>____ ____ ____</strong>）。入力欄は語句全体を半角スペースで入力してください。</div>
     </div>
 
     <div id="list" class="list"></div>
@@ -59,474 +453,113 @@
 // ===== Data (Lesson 1–6) =====
 const LESSONS = {
   "Lesson 1": [
-    {
-      "term": "adventure",
-      "sentence": "have had quite an adventure",
-      "jp": "すごい冒険をした"
-    },
-    {
-      "term": "bowl",
-      "sentence": "handed Sparky's bowl",
-      "jp": "Sparkyのボウル（鉢）を渡した"
-    },
-    {
-      "term": "bring [brought]",
-      "sentence": "brought me to the door",
-      "jp": "私をドアの前まで連れてきた"
-    },
-    {
-      "term": "captain",
-      "sentence": "a picture of me and the captain",
-      "jp": "私と船長の写真"
-    },
-    {
-      "term": "clap",
-      "sentence": "clapped his hand to his forehead",
-      "jp": "彼の額で手をポンと叩いた"
-    },
-    {
-      "term": "crew",
-      "sentence": "with the crew",
-      "jp": "乗組員と一緒に"
-    },
-    {
-      "term": "cross",
-      "sentence": "crossed Lake Erie",
-      "jp": "エリー湖を渡った"
-    },
-    {
-      "term": "forehead",
-      "sentence": "clapped his hand to his forehead",
-      "jp": "彼の額で手をポンと叩いた"
-    },
-    {
-      "term": "goldfish",
-      "sentence": "remembered his goldfish",
-      "jp": "彼の金魚を思い出した"
-    },
-    {
-      "term": "mover",
-      "sentence": "head mover",
-      "jp": "引っ越し業者のリーダー"
-    },
-    {
-      "term": "plenty",
-      "sentence": "plenty of room",
-      "jp": "十分な空間"
-    },
-    {
-      "term": "quite",
-      "sentence": "have had quite an adventure",
-      "jp": "すごい冒険をした"
-    },
-    {
-      "term": "remember",
-      "sentence": "remembered his goldfish",
-      "jp": "彼の金魚を思い出した"
-    },
-    {
-      "term": "sail",
-      "sentence": "sailed on a small cargo ship",
-      "jp": "小さな貨物船に乗って航海した"
-    },
-    {
-      "term": "stare",
-      "sentence": "stared at each other",
-      "jp": "互いをじっと見つめ合った"
-    }
+    { "term": "adventure", "sentence": "have had quite an adventure", "jp": "すごい冒険をした" },
+    { "term": "bowl", "sentence": "handed Sparky's bowl", "jp": "Sparkyのボウル（鉢）を渡した" },
+    { "term": "bring [brought]", "sentence": "brought me to the door", "jp": "私をドアの前まで連れてきた" },
+    { "term": "captain", "sentence": "a picture of me and the captain", "jp": "私と船長の写真" },
+    { "term": "clap", "sentence": "clapped his hand to his forehead", "jp": "彼の額で手をポンと叩いた" },
+    { "term": "crew", "sentence": "with the crew", "jp": "乗組員と一緒に" },
+    { "term": "cross", "sentence": "crossed Lake Erie", "jp": "エリー湖を渡った" },
+    { "term": "forehead", "sentence": "clapped his hand to his forehead", "jp": "彼の額で手をポンと叩いた" },
+    { "term": "goldfish", "sentence": "remembered his goldfish", "jp": "彼の金魚を思い出した" },
+    { "term": "mover", "sentence": "head mover", "jp": "引っ越し業者のリーダー" },
+    { "term": "plenty", "sentence": "plenty of room", "jp": "十分な空間" },
+    { "term": "quite", "sentence": "have had quite an adventure", "jp": "すごい冒険をした" },
+    { "term": "remember", "sentence": "remembered his goldfish", "jp": "彼の金魚を思い出した" },
+    { "term": "sail", "sentence": "sailed on a small cargo ship", "jp": "小さな貨物船に乗って航海した" },
+    { "term": "stare", "sentence": "stared at each other", "jp": "互いをじっと見つめ合った" }
   ],
   "Lesson 2": [
-    {
-      "term": "energy",
-      "sentence": "make energy",
-      "jp": "エネルギーを作り出す"
-    },
-    {
-      "term": "fill",
-      "sentence": "be filled with water",
-      "jp": "水で満たす"
-    },
-    {
-      "term": "firm",
-      "sentence": "stay firm and upright",
-      "jp": "硬く直立した状態を保つ"
-    },
-    {
-      "term": "flexible",
-      "sentence": "strong and flexible",
-      "jp": "丈夫で柔軟な"
-    },
-    {
-      "term": "internal",
-      "sentence": "internal tubes",
-      "jp": "内部の管"
-    },
-    {
-      "term": "lack",
-      "sentence": "die from a lack of energy",
-      "jp": "エネルギー不足で死ぬ"
-    },
-    {
-      "term": "muscle",
-      "sentence": "human muscles",
-      "jp": "人間の筋肉"
-    },
-    {
-      "term": "shape",
-      "sentence": "keep their shape",
-      "jp": "彼らの形を保つ"
-    },
-    {
-      "term": "store",
-      "sentence": "store water",
-      "jp": "水を蓄える、水を貯める"
-    },
-    {
-      "term": "strong",
-      "sentence": "strong and flexible",
-      "jp": "強く柔軟な"
-    },
-    {
-      "term": "sugar",
-      "sentence": "use this sugar for energy",
-      "jp": "この糖分をエネルギーとして使用する"
-    },
-    {
-      "term": "tissue",
-      "sentence": "plant tissue",
-      "jp": "植物組織"
-    },
-    {
-      "term": "tube",
-      "sentence": "internal tubes",
-      "jp": "内部の管"
-    },
-    {
-      "term": "upright",
-      "sentence": "stay firm and upright",
-      "jp": "硬く直立した状態を保つ"
-    },
-    {
-      "term": "use",
-      "sentence": "use water",
-      "jp": "水を使用する"
-    }
+    { "term": "energy", "sentence": "make energy", "jp": "エネルギーを作り出す" },
+    { "term": "fill", "sentence": "be filled with water", "jp": "水で満たす" },
+    { "term": "firm", "sentence": "stay firm and upright", "jp": "硬く直立した状態を保つ" },
+    { "term": "flexible", "sentence": "strong and flexible", "jp": "丈夫で柔軟な" },
+    { "term": "internal", "sentence": "internal tubes", "jp": "内部の管" },
+    { "term": "lack", "sentence": "die from a lack of energy", "jp": "エネルギー不足で死ぬ" },
+    { "term": "muscle", "sentence": "human muscles", "jp": "人間の筋肉" },
+    { "term": "shape", "sentence": "keep their shape", "jp": "彼らの形を保つ" },
+    { "term": "store", "sentence": "store water", "jp": "水を蓄える、水を貯める" },
+    { "term": "strong", "sentence": "strong and flexible", "jp": "強く柔軟な" },
+    { "term": "sugar", "sentence": "use this sugar for energy", "jp": "この糖分をエネルギーとして使用する" },
+    { "term": "tissue", "sentence": "plant tissue", "jp": "植物組織" },
+    { "term": "tube", "sentence": "internal tubes", "jp": "内部の管" },
+    { "term": "upright", "sentence": "stay firm and upright", "jp": "硬く直立した状態を保つ" },
+    { "term": "use", "sentence": "use water", "jp": "水を使用する" }
   ],
   "Lesson 3": [
-    {
-      "term": "break down",
-      "sentence": "break down most foods",
-      "jp": "ほとんどの食べ物を分解する"
-    },
-    {
-      "term": "flow",
-      "sentence": "keeps our blood flowing",
-      "jp": "私たちの血が流れ続ける"
-    },
-    {
-      "term": "function",
-      "sentence": "three basic important functions",
-      "jp": "基本的な3つの重要な機能"
-    },
-    {
-      "term": "glue",
-      "sentence": "acts like glue",
-      "jp": "接着剤のような役割をする"
-    },
-    {
-      "term": "keep",
-      "sentence": "keeps our blood flowing",
-      "jp": "私たちの血が流れ続ける"
-    },
-    {
-      "term": "necessary",
-      "sentence": "necessary",
-      "jp": "必要な"
-    },
-    {
-      "term": "nutrient",
-      "sentence": "get important nutrients",
-      "jp": "重要な栄養素を得る"
-    },
-    {
-      "term": "organ",
-      "sentence": "our muscles and organs",
-      "jp": "私たちの筋肉と臓器"
-    },
-    {
-      "term": "properly",
-      "sentence": "flow properly",
-      "jp": "ちゃんと流れる"
-    },
-    {
-      "term": "separate",
-      "sentence": "separate the nutrients from the waste",
-      "jp": "栄養素を廃棄物から分離する"
-    },
-    {
-      "term": "skin",
-      "sentence": "keeps our skin strong",
-      "jp": "私たちの皮膚を丈夫に保つ"
-    },
-    {
-      "term": "survive",
-      "sentence": "needs water to survive",
-      "jp": "生存するためには水が必要だ"
-    },
-    {
-      "term": "thick",
-      "sentence": "too thick to flow",
-      "jp": "流れるにはどろどろすぎる"
-    },
-    {
-      "term": "tiny",
-      "sentence": "tiny veins",
-      "jp": "とても小さな静脈"
-    },
-    {
-      "term": "waste",
-      "sentence": "separate the nutrients from the waste",
-      "jp": "栄養素を廃棄物から分離する"
-    }
+    { "term": "break down", "sentence": "break down most foods", "jp": "ほとんどの食べ物を分解する" },
+    { "term": "flow", "sentence": "keeps our blood flowing", "jp": "私たちの血が流れ続ける" },
+    { "term": "function", "sentence": "three basic important functions", "jp": "基本的な3つの重要な機能" },
+    { "term": "glue", "sentence": "acts like glue", "jp": "接着剤のような役割をする" },
+    { "term": "keep", "sentence": "keeps our blood flowing", "jp": "私たちの血が流れ続ける" },
+    { "term": "necessary", "sentence": "necessary", "jp": "必要な" },
+    { "term": "nutrient", "sentence": "get important nutrients", "jp": "重要な栄養素を得る" },
+    { "term": "organ", "sentence": "our muscles and organs", "jp": "私たちの筋肉と臓器" },
+    { "term": "properly", "sentence": "flow properly", "jp": "ちゃんと流れる" },
+    { "term": "separate", "sentence": "separate the nutrients from the waste", "jp": "栄養素を廃棄物から分離する" },
+    { "term": "skin", "sentence": "keeps our skin strong", "jp": "私たちの皮膚を丈夫に保つ" },
+    { "term": "survive", "sentence": "needs water to survive", "jp": "生存するためには水が必要だ" },
+    { "term": "thick", "sentence": "too thick to flow", "jp": "流れるにはどろどろすぎる" },
+    { "term": "tiny", "sentence": "tiny veins", "jp": "とても小さな静脈" },
+    { "term": "waste", "sentence": "separate the nutrients from the waste", "jp": "栄養素を廃棄物から分離する" }
   ],
   "Lesson 4": [
-    {
-      "term": "appliance",
-      "sentence": "all the appliances",
-      "jp": "すべての家電製品"
-    },
-    {
-      "term": "cooking",
-      "sentence": "Grandma's irreplaceable cooking",
-      "jp": "おばあさんのかけがえのない料理"
-    },
-    {
-      "term": "figure out",
-      "sentence": "figure out the rest",
-      "jp": "その残りは理解しました"
-    },
-    {
-      "term": "float",
-      "sentence": "floating in it",
-      "jp": "その中で浮かんでいる"
-    },
-    {
-      "term": "gadget",
-      "sentence": "many gadgets",
-      "jp": "たくさんの道具"
-    },
-    {
-      "term": "glow",
-      "sentence": "glowed orange",
-      "jp": "オレンジ色に輝いた"
-    },
-    {
-      "term": "irreplaceable",
-      "sentence": "Grandma's irreplaceable cooking",
-      "jp": "おばあさんのかけがえのない料理"
-    },
-    {
-      "term": "odorless",
-      "sentence": "The gel is odorless.",
-      "jp": "そのゲルは無臭です"
-    },
-    {
-      "term": "panel",
-      "sentence": "a panel slid open",
-      "jp": "1つの板が滑るように開いた"
-    },
-    {
-      "term": "pull out",
-      "sentence": "pulled out a sausage",
-      "jp": "ソーセージを1つ取り出した"
-    },
-    {
-      "term": "reveal",
-      "sentence": "revealing hanging pots and pans",
-      "jp": "壁にかけられたポットと鍋が姿を現しながら"
-    },
-    {
-      "term": "shelf [shelves]",
-      "sentence": "on a shelf",
-      "jp": "棚の上に"
-    },
-    {
-      "term": "slide [slid]",
-      "sentence": "a panel slid open",
-      "jp": "1つの板が滑るように開いた"
-    },
-    {
-      "term": "stay away",
-      "sentence": "stay away from this kitchen",
-      "jp": "この台所から離れていなさい"
-    },
-    {
-      "term": "straight",
-      "sentence": "went straight",
-      "jp": "まっすぐ行った"
-    }
+    { "term": "appliance", "sentence": "all the appliances", "jp": "すべての家電製品" },
+    { "term": "cooking", "sentence": "Grandma's irreplaceable cooking", "jp": "おばあさんのかけがえのない料理" },
+    { "term": "figure out", "sentence": "figure out the rest", "jp": "その残りは理解しました" },
+    { "term": "float", "sentence": "floating in it", "jp": "その中で浮かんでいる" },
+    { "term": "gadget", "sentence": "many gadgets", "jp": "たくさんの道具" },
+    { "term": "glow", "sentence": "glowed orange", "jp": "オレンジ色に輝いた" },
+    { "term": "irreplaceable", "sentence": "Grandma's irreplaceable cooking", "jp": "おばあさんのかけがえのない料理" },
+    { "term": "odorless", "sentence": "The gel is odorless.", "jp": "そのゲルは無臭です" },
+    { "term": "panel", "sentence": "a panel slid open", "jp": "1つの板が滑るように開いた" },
+    { "term": "pull out", "sentence": "pulled out a sausage", "jp": "ソーセージを1つ取り出した" },
+    { "term": "reveal", "sentence": "revealing hanging pots and pans", "jp": "壁にかけられたポットと鍋が姿を現しながら" },
+    { "term": "shelf [shelves]", "sentence": "on a shelf", "jp": "棚の上に" },
+    { "term": "slide [slid]", "sentence": "a panel slid open", "jp": "1つの板が滑るように開いた" },
+    { "term": "stay away", "sentence": "stay away from this kitchen", "jp": "この台所から離れていなさい" },
+    { "term": "straight", "sentence": "went straight", "jp": "まっすぐ行った" }
   ],
   "Lesson 5": [
-    {
-      "term": "allow",
-      "sentence": "allow computers to become even smaller",
-      "jp": "コンピューターをより一層小さくしてくれる"
-    },
-    {
-      "term": "connection",
-      "sentence": "What's the connection?",
-      "jp": "どんな関連性があるのでしょう？"
-    },
-    {
-      "term": "create",
-      "sentence": "create the solutions",
-      "jp": "解決策を生み出す"
-    },
-    {
-      "term": "deal with",
-      "sentence": "deals with saving energy",
-      "jp": "エネルギーの節約を扱う"
-    },
-    {
-      "term": "device",
-      "sentence": "energy storage devices",
-      "jp": "エネルギーを保存する装置"
-    },
-    {
-      "term": "electricity",
-      "sentence": "store electricity",
-      "jp": "電気を保存する"
-    },
-    {
-      "term": "frame",
-      "sentence": "in the frames",
-      "jp": "メガネフレームの中に"
-    },
-    {
-      "term": "inexpensive",
-      "sentence": "inexpensive insulation",
-      "jp": "安い断熱材"
-    },
-    {
-      "term": "insulation",
-      "sentence": "inexpensive insulation",
-      "jp": "安い断熱材"
-    },
-    {
-      "term": "man-made",
-      "sentence": "man-made nano-materials",
-      "jp": "人が作り出したナノ物質"
-    },
-    {
-      "term": "pass through",
-      "sentence": "keeping air from passing through",
-      "jp": "空気が通過するのを防ぐ"
-    },
-    {
-      "term": "promising",
-      "sentence": "promising nanotechnology research",
-      "jp": "有望なナノテクノロジーの研究"
-    },
-    {
-      "term": "save",
-      "sentence": "saves energy and money",
-      "jp": "エネルギーとお金を節約する"
-    },
-    {
-      "term": "storage",
-      "sentence": "energy storage",
-      "jp": "エネルギーを保存する"
-    },
-    {
-      "term": "temperature",
-      "sentence": "maintain temperatures",
-      "jp": "温度を維持する"
-    }
+    { "term": "allow", "sentence": "allow computers to become even smaller", "jp": "コンピューターをより一層小さくしてくれる" },
+    { "term": "connection", "sentence": "What's the connection?", "jp": "どんな関連性があるのでしょう？" },
+    { "term": "create", "sentence": "create the solutions", "jp": "解決策を生み出す" },
+    { "term": "deal with", "sentence": "deals with saving energy", "jp": "エネルギーの節約を扱う" },
+    { "term": "device", "sentence": "energy storage devices", "jp": "エネルギーを保存する装置" },
+    { "term": "electricity", "sentence": "store electricity", "jp": "電気を保存する" },
+    { "term": "frame", "sentence": "in the frames", "jp": "メガネフレームの中に" },
+    { "term": "inexpensive", "sentence": "inexpensive insulation", "jp": "安い断熱材" },
+    { "term": "insulation", "sentence": "inexpensive insulation", "jp": "安い断熱材" },
+    { "term": "man-made", "sentence": "man-made nano-materials", "jp": "人が作り出したナノ物質" },
+    { "term": "pass through", "sentence": "keeping air from passing through", "jp": "空気が通過するのを防ぐ" },
+    { "term": "promising", "sentence": "promising nanotechnology research", "jp": "有望なナノテクノロジーの研究" },
+    { "term": "save", "sentence": "saves energy and money", "jp": "エネルギーとお金を節約する" },
+    { "term": "storage", "sentence": "energy storage", "jp": "エネルギーを保存する" },
+    { "term": "temperature", "sentence": "maintain temperatures", "jp": "温度を維持する" }
   ],
   "Lesson 6": [
-    {
-      "term": "advanced",
-      "sentence": "the most advanced shoe",
-      "jp": "最も進歩した靴"
-    },
-    {
-      "term": "arch",
-      "sentence": "arch",
-      "jp": "土踏まず"
-    },
-    {
-      "term": "brand new",
-      "sentence": "some brand new shoes",
-      "jp": "いくつかの真新しい靴"
-    },
-    {
-      "term": "combine",
-      "sentence": "combines the natural feel with added protection",
-      "jp": "自然な感覚と保護する機能を兼ね備えている"
-    },
-    {
-      "term": "extra",
-      "sentence": "at no extra charge",
-      "jp": "追加料金なし"
-    },
-    {
-      "term": "fit ... like a glove",
-      "sentence": "fits your foot like a glove",
-      "jp": "あつらえたよう（手袋のように）にあなたの足にぴったり合う"
-    },
-    {
-      "term": "last",
-      "sentence": "lasts for one week",
-      "jp": "1週間続けられる"
-    },
-    {
-      "term": "material",
-      "sentence": "mesh material",
-      "jp": "メッシュ素材"
-    },
-    {
-      "term": "metal",
-      "sentence": "metal springs",
-      "jp": "金属スプリング"
-    },
-    {
-      "term": "protection",
-      "sentence": "protection from scrapes and cuts",
-      "jp": "すり傷と切り傷から保護"
-    },
-    {
-      "term": "run out",
-      "sentence": "until supplies run out",
-      "jp": "供給品が品切れになるまで"
-    },
-    {
-      "term": "sale",
-      "sentence": "sale",
-      "jp": "割引販売、バーゲン"
-    },
-    {
-      "term": "shock",
-      "sentence": "shock absorption",
-      "jp": "衝撃吸収"
-    },
-    {
-      "term": "supply",
-      "sentence": "until supplies run out",
-      "jp": "供給品が品切れになるまで"
-    },
-    {
-      "term": "vest",
-      "sentence": "bulletproof vests",
-      "jp": "防弾チョッキ"
-    }
+    { "term": "advanced", "sentence": "the most advanced shoe", "jp": "最も進歩した靴" },
+    { "term": "arch", "sentence": "arch", "jp": "土踏まず" },
+    { "term": "brand new", "sentence": "some brand new shoes", "jp": "いくつかの真新しい靴" },
+    { "term": "combine", "sentence": "combines the natural feel with added protection", "jp": "自然な感覚と保護する機能を兼ね備えている" },
+    { "term": "extra", "sentence": "at no extra charge", "jp": "追加料金なし" },
+    { "term": "fit ... like a glove", "sentence": "fits your foot like a glove", "jp": "あつらえたよう（手袋のように）にあなたの足にぴったり合う" },
+    { "term": "last", "sentence": "lasts for one week", "jp": "1週間続けられる" },
+    { "term": "material", "sentence": "mesh material", "jp": "メッシュ素材" },
+    { "term": "metal", "sentence": "metal springs", "jp": "金属スプリング" },
+    { "term": "protection", "sentence": "protection from scrapes and cuts", "jp": "すり傷と切り傷から保護" },
+    { "term": "run out", "sentence": "until supplies run out", "jp": "供給品が品切れになるまで" },
+    { "term": "sale", "sentence": "sale", "jp": "割引販売、バーゲン" },
+    { "term": "shock", "sentence": "shock absorption", "jp": "衝撃吸収" },
+    { "term": "supply", "sentence": "until supplies run out", "jp": "供給品が品切れになるまで" },
+    { "term": "vest", "sentence": "bulletproof vests", "jp": "防弾チョッキ" }
   ]
-
 };
 
 // ===== Utilities =====
 const $ = (sel) => document.querySelector(sel);
-const LS_KEY_LESSON = 'cloze-app-lesson-stats-v2'; // レッスン集計
-const LS_KEY_ITEMS  = 'cloze-app-item-attempts-v2'; // 問題ごとの実施履歴
+const LS_KEY_LESSON = 'cloze-app-lesson-stats-v2';
+const LS_KEY_ITEMS  = 'cloze-app-item-attempts-v2';
 function normalize(s){return s.toLowerCase().replace(/\s+/g,' ').trim();}
 function escapeRegExp(s){return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');}
 function todayISO(){ const d = new Date(); const tz = new Date(d.getTime()-d.getTimezoneOffset()*60000); return tz.toISOString().slice(0,10); }
@@ -567,12 +600,167 @@ function makeCloze(sentence, base){
 function load(key, fallback){ try{ return JSON.parse(localStorage.getItem(key)||JSON.stringify(fallback)); }catch{ return fallback; } }
 function save(key, obj){ localStorage.setItem(key, JSON.stringify(obj)); }
 
+// ===== Fanfare (Web Audio API) =====
+let audioCtx = null;
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function playFanfare(isMega) {
+  const ctx = getAudioCtx();
+  const now = ctx.currentTime;
+  const masterGain = ctx.createGain();
+  masterGain.gain.value = 0.18;
+  masterGain.connect(ctx.destination);
+
+  function playNote(freq, start, dur, type = 'square') {
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.type = type;
+    osc.frequency.value = freq;
+    g.gain.setValueAtTime(0, now + start);
+    g.gain.linearRampToValueAtTime(1, now + start + 0.03);
+    g.gain.setValueAtTime(1, now + start + dur - 0.05);
+    g.gain.linearRampToValueAtTime(0, now + start + dur);
+    osc.connect(g);
+    g.connect(masterGain);
+    osc.start(now + start);
+    osc.stop(now + start + dur);
+  }
+
+  if (isMega) {
+    // Grand fanfare for 5-streak
+    const notes = [523, 659, 784, 1047, 784, 1047, 1319];
+    const times = [0, 0.12, 0.24, 0.36, 0.50, 0.65, 0.80];
+    const durs  = [0.15, 0.15, 0.15, 0.18, 0.18, 0.18, 0.5];
+    notes.forEach((f, i) => {
+      playNote(f, times[i], durs[i], 'square');
+      playNote(f * 1.5, times[i], durs[i] * 0.8, 'triangle');
+    });
+    // Final chord
+    [1047, 1319, 1568].forEach(f => {
+      playNote(f, 1.0, 0.7, 'square');
+      playNote(f * 0.5, 1.0, 0.7, 'triangle');
+    });
+  } else {
+    // Short cheerful fanfare
+    const notes = [523, 659, 784, 1047];
+    const times = [0, 0.1, 0.2, 0.3];
+    const durs  = [0.12, 0.12, 0.12, 0.35];
+    notes.forEach((f, i) => {
+      playNote(f, times[i], durs[i], 'square');
+      playNote(f * 1.5, times[i], durs[i] * 0.7, 'triangle');
+    });
+  }
+}
+
+function playWrongSound() {
+  const ctx = getAudioCtx();
+  const now = ctx.currentTime;
+  const masterGain = ctx.createGain();
+  masterGain.gain.value = 0.1;
+  masterGain.connect(ctx.destination);
+  // Gentle "womp womp"
+  const osc = ctx.createOscillator();
+  const g = ctx.createGain();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(350, now);
+  osc.frequency.linearRampToValueAtTime(250, now + 0.3);
+  g.gain.setValueAtTime(0.8, now);
+  g.gain.linearRampToValueAtTime(0, now + 0.35);
+  osc.connect(g);
+  g.connect(masterGain);
+  osc.start(now);
+  osc.stop(now + 0.4);
+}
+
+// ===== Confetti =====
+const confettiCanvas = document.getElementById('confetti-canvas');
+const confettiCtx = confettiCanvas.getContext('2d');
+let confettiPieces = [];
+let confettiRAF = null;
+
+function resizeConfettiCanvas() {
+  confettiCanvas.width = window.innerWidth;
+  confettiCanvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeConfettiCanvas);
+resizeConfettiCanvas();
+
+const CONFETTI_COLORS = ['#f0c75e','#b5303f','#1b2a4a','#1ea362','#ff6b35','#e91e8c','#00bcd4','#fff'];
+const CONFETTI_COLORS_MEGA = ['#ff0080','#ff8c00','#40e0d0','#ff4081','#7c4dff','#ffeb3b','#00e676','#e040fb','#fff'];
+
+function launchConfetti(isMega) {
+  const count = isMega ? 200 : 80;
+  const colors = isMega ? CONFETTI_COLORS_MEGA : CONFETTI_COLORS;
+  confettiPieces = [];
+  for (let i = 0; i < count; i++) {
+    confettiPieces.push({
+      x: Math.random() * confettiCanvas.width,
+      y: -20 - Math.random() * confettiCanvas.height * 0.5,
+      w: 6 + Math.random() * 8,
+      h: 4 + Math.random() * 4,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      vx: (Math.random() - 0.5) * 6,
+      vy: 2 + Math.random() * 4,
+      rot: Math.random() * Math.PI * 2,
+      rotSpeed: (Math.random() - 0.5) * 0.2,
+      gravity: 0.06 + Math.random() * 0.04,
+      opacity: 1
+    });
+  }
+  if (confettiRAF) cancelAnimationFrame(confettiRAF);
+  animateConfetti();
+}
+
+function animateConfetti() {
+  confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+  let alive = false;
+  for (const p of confettiPieces) {
+    if (p.opacity <= 0) continue;
+    alive = true;
+    p.vy += p.gravity;
+    p.x += p.vx;
+    p.y += p.vy;
+    p.rot += p.rotSpeed;
+    if (p.y > confettiCanvas.height + 20) { p.opacity = 0; continue; }
+    if (p.y > confettiCanvas.height * 0.7) p.opacity -= 0.02;
+    confettiCtx.save();
+    confettiCtx.translate(p.x, p.y);
+    confettiCtx.rotate(p.rot);
+    confettiCtx.globalAlpha = Math.max(0, p.opacity);
+    confettiCtx.fillStyle = p.color;
+    confettiCtx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+    confettiCtx.restore();
+  }
+  if (alive) confettiRAF = requestAnimationFrame(animateConfetti);
+  else confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+}
+
+// ===== Celebration Text =====
+const CHEERS = ['🎉 Brilliant!', '⭐ Splendid!', '🏆 Well Done!', '👏 Bravo!', '🌟 Fantastic!', '✨ Superb!', '🎊 Top Marks!'];
+const CHEERS_MEGA = ['🏆🔥 OUTSTANDING! 🔥🏆', '👑 CHAMPION! 👑', '🌈 UNSTOPPABLE! 🌈', '⚡ LEGENDARY! ⚡'];
+const MISS_MSGS = ['Keep trying, old chap! 🎩', 'Almost there! 💪', 'Have another go! 🇬🇧', 'Chin up! Next one! ☕'];
+
+function showCelebration(isMega) {
+  const msgs = isMega ? CHEERS_MEGA : CHEERS;
+  const msg = msgs[Math.floor(Math.random() * msgs.length)];
+  const el = document.createElement('div');
+  el.className = isMega ? 'mega-celebration-text' : 'celebration-text';
+  el.textContent = msg;
+  document.body.appendChild(el);
+  const duration = isMega ? 2500 : 1800;
+  setTimeout(() => el.remove(), duration);
+}
+
 // ===== State =====
 const state = {
   lesson: Object.keys(LESSONS)[0],
   showHint: false,
+  streak: 0,
   lessonStats: load(LS_KEY_LESSON, {}),
-  itemAttempts: load(LS_KEY_ITEMS, {}), // { problemId: [{date, correct}] }
+  itemAttempts: load(LS_KEY_ITEMS, {}),
 };
 
 function problemId(lesson, item){ return `${lesson}::${item.term}::${item.sentence}`; }
@@ -593,7 +781,17 @@ function init(){
 
 function renderHeader(){
   $('#stats').textContent = `${state.lesson}｜正答率 ${lessonProgressRate()}`;
-  $('#btn-hint').textContent = state.showHint ? '和訳ヒント ON' : '和訳ヒント OFF';
+  $('#btn-hint').textContent = state.showHint ? '💡 Hint ON' : '💡 Hint OFF';
+
+  const badge = $('#streak-badge');
+  const countEl = $('#streak-count');
+  if (state.streak >= 2) {
+    badge.style.display = 'inline-flex';
+    countEl.textContent = state.streak;
+    badge.classList.toggle('mega', state.streak >= 5);
+  } else {
+    badge.style.display = 'none';
+  }
 }
 
 function lessonProgressRate(){
@@ -616,7 +814,7 @@ function itemStatsText(lesson, item){
   const w7Total = w7.length;
   const w7Correct = w7.filter(a=>a.correct).length;
   const w7Rate = w7Total ? Math.round(w7Correct/w7Total*100) : '—';
-  return `この問題の正答率：${rate}% (${correct}/${total})｜直近7日：${w7Rate}${w7Total?`% (${w7Correct}/${w7Total})`:''}｜最終実施日：${last}`;
+  return `正答率：${rate}% (${correct}/${total})｜直近7日：${w7Rate}${w7Total?`% (${w7Correct}/${w7Total})`:''}｜最終：${last}`;
 }
 
 function renderList(){
@@ -627,10 +825,11 @@ function renderList(){
   items.forEach((it, idx)=>{
     const wrap = document.createElement('div');
     wrap.className = 'item';
+    wrap.id = `item-${idx}`;
 
     const head = document.createElement('div');
     head.className = 'item-head';
-    head.innerHTML = `<div class="idx">#${idx+1}</div>`;
+    head.innerHTML = `<div class="idx">${idx+1}</div>`;
 
     const cloze = document.createElement('div');
     cloze.className = 'cloze';
@@ -639,22 +838,22 @@ function renderList(){
     const hint = document.createElement('div');
     hint.className = 'hint';
     hint.style.display = state.showHint ? '' : 'none';
-    hint.textContent = `ヒント（日）：${it.jp}`;
+    hint.textContent = `💬 ヒント：${it.jp}`;
 
     const controls = document.createElement('div');
     controls.className = 'controls';
     const input = document.createElement('input');
     input.type = 'text';
-    input.placeholder = '解答（例: in a flash）';
+    input.placeholder = 'Type your answer here…';
     input.id = `ans-${idx}`;
 
     const btnCheck = document.createElement('button');
     btnCheck.className = 'btn-primary';
-    btnCheck.textContent = '判定';
+    btnCheck.textContent = '✅ Check!';
     btnCheck.addEventListener('click', ()=>check(idx));
 
     const btnReveal = document.createElement('button');
-    btnReveal.textContent = '答えを表示';
+    btnReveal.textContent = '👁 Answer';
     btnReveal.addEventListener('click', ()=>{ input.value = it.term; setJudge(idx, true, false); renderHeader(); });
 
     controls.append(input, btnCheck, btnReveal);
@@ -677,38 +876,64 @@ function renderList(){
 
 function setJudge(idx, isCorrect, record=true){
   const judge = document.getElementById(`judge-${idx}`);
+  const itemEl = document.getElementById(`item-${idx}`);
   judge.className = 'judge';
-  if (isCorrect){ judge.textContent = '正解！よくできました。'; judge.classList.add('ok'); }
-  else { judge.textContent = `不正解…`; judge.classList.add('bad'); }
+  itemEl.classList.remove('correct-flash', 'wrong-shake');
 
-  if (!record) return; // 答え表示時は記録しない
+  if (isCorrect){
+    judge.textContent = CHEERS[Math.floor(Math.random() * CHEERS.length)].replace(/[^\w\s!.]/g,'') + ' 正解！';
+    judge.classList.add('ok');
+    // Trigger card animation
+    void itemEl.offsetWidth; // force reflow
+    itemEl.classList.add('correct-flash');
+  } else {
+    const it = LESSONS[state.lesson][idx];
+    const missMsg = MISS_MSGS[Math.floor(Math.random() * MISS_MSGS.length)];
+    judge.innerHTML = `${missMsg}<br>正解は: <strong>${it.term}</strong>`;
+    judge.classList.add('bad');
+    void itemEl.offsetWidth;
+    itemEl.classList.add('wrong-shake');
+  }
 
-  // 集計（レッスン）
+  if (!record) return;
+
+  // Streak & celebrations
+  if (isCorrect) {
+    state.streak++;
+    const isMega = state.streak >= 5 && state.streak % 5 === 0;
+    playFanfare(isMega);
+    launchConfetti(isMega);
+    showCelebration(isMega);
+  } else {
+    state.streak = 0;
+    playWrongSound();
+  }
+
+  // Lesson stats
   const rec = state.lessonStats[state.lesson] || { total:0, correct:0 };
   rec.total += 1; rec.correct += isCorrect ? 1 : 0; state.lessonStats[state.lesson] = rec; save(LS_KEY_LESSON, state.lessonStats);
 
-  // 履歴（問題）
+  // Item history
   const item = LESSONS[state.lesson][idx];
   const id = problemId(state.lesson, item);
   const arr = state.itemAttempts[id] || [];
   arr.push({ date: todayISO(), correct: isCorrect });
   state.itemAttempts[id] = arr; save(LS_KEY_ITEMS, state.itemAttempts);
 
-  // メタ更新
+  // Update meta
   const meta = document.getElementById(`meta-${idx}`);
   meta.textContent = itemStatsText(state.lesson, item);
 }
 
 function check(idx){
   const input = document.getElementById(`ans-${idx}`);
-  if (input.dataset.locked === "true") return; // ← 追加：連打防止
-  input.dataset.locked = "true"; // ← 追加：この入力をロック
+  if (input.dataset.locked === "true") return;
+  input.dataset.locked = "true";
   const it = LESSONS[state.lesson][idx];
   const ans = normalize(input.value);
   const ok = buildAcceptableAnswers(it.term).includes(ans);
   setJudge(idx, ok, true);
   renderHeader();
-  // 入力が変更されたらロック解除
   input.addEventListener('input', () => { input.dataset.locked = "false"; }, { once: true });
 }
 
