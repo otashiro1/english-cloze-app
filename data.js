@@ -1,0 +1,111 @@
+window.WORD_DATA = {
+  "British Summer School": {
+    "Lesson 1": [
+      { "term": "adventure", "sentence": "have had quite an adventure", "jp": "すごい冒険をした" },
+      { "term": "bowl", "sentence": "handed Sparky's bowl", "jp": "Sparkyのボウル（鉢）を渡した" },
+      { "term": "bring [brought]", "sentence": "brought me to the door", "jp": "私をドアの前まで連れてきた" },
+      { "term": "captain", "sentence": "a picture of me and the captain", "jp": "私と船長の写真" },
+      { "term": "clap", "sentence": "clapped his hand to his forehead", "jp": "彼の額で手をポンと叩いた" },
+      { "term": "crew", "sentence": "with the crew", "jp": "乗組員と一緒に" },
+      { "term": "cross", "sentence": "crossed Lake Erie", "jp": "エリー湖を渡った" },
+      { "term": "forehead", "sentence": "clapped his hand to his forehead", "jp": "彼の額で手をポンと叩いた" },
+      { "term": "goldfish", "sentence": "remembered his goldfish", "jp": "彼の金魚を思い出した" },
+      { "term": "mover", "sentence": "head mover", "jp": "引っ越し業者のリーダー" },
+      { "term": "plenty", "sentence": "plenty of room", "jp": "十分な空間" },
+      { "term": "quite", "sentence": "have had quite an adventure", "jp": "すごい冒険をした" },
+      { "term": "remember", "sentence": "remembered his goldfish", "jp": "彼の金魚を思い出した" },
+      { "term": "sail", "sentence": "sailed on a small cargo ship", "jp": "小さな貨物船に乗って航海した" },
+      { "term": "stare", "sentence": "stared at each other", "jp": "互いをじっと見つめ合った" }
+    ],
+    "Lesson 2": [
+      { "term": "energy", "sentence": "make energy", "jp": "エネルギーを作り出す" },
+      { "term": "fill", "sentence": "be filled with water", "jp": "水で満たす" },
+      { "term": "firm", "sentence": "stay firm and upright", "jp": "硬く直立した状態を保つ" },
+      { "term": "flexible", "sentence": "strong and flexible", "jp": "丈夫で柔軟な" },
+      { "term": "internal", "sentence": "internal tubes", "jp": "内部の管" },
+      { "term": "lack", "sentence": "die from a lack of energy", "jp": "エネルギー不足で死ぬ" },
+      { "term": "muscle", "sentence": "human muscles", "jp": "人間の筋肉" },
+      { "term": "shape", "sentence": "keep their shape", "jp": "彼らの形を保つ" },
+      { "term": "store", "sentence": "store water", "jp": "水を蓄える、水を貯める" },
+      { "term": "strong", "sentence": "strong and flexible", "jp": "強く柔軟な" },
+      { "term": "sugar", "sentence": "use this sugar for energy", "jp": "この糖分をエネルギーとして使用する" },
+      { "term": "tissue", "sentence": "plant tissue", "jp": "植物組織" },
+      { "term": "tube", "sentence": "internal tubes", "jp": "内部の管" },
+      { "term": "upright", "sentence": "stay firm and upright", "jp": "硬く直立した状態を保つ" },
+      { "term": "use", "sentence": "use water", "jp": "水を使用する" }
+    ],
+    "Lesson 3": [
+      { "term": "break down", "sentence": "break down most foods", "jp": "ほとんどの食べ物を分解する" },
+      { "term": "flow", "sentence": "keeps our blood flowing", "jp": "私たちの血が流れ続ける" },
+      { "term": "function", "sentence": "three basic important functions", "jp": "基本的な3つの重要な機能" },
+      { "term": "glue", "sentence": "acts like glue", "jp": "接着剤のような役割をする" },
+      { "term": "keep", "sentence": "keeps our blood flowing", "jp": "私たちの血が流れ続ける" },
+      { "term": "necessary", "sentence": "necessary", "jp": "必要な" },
+      { "term": "nutrient", "sentence": "get important nutrients", "jp": "重要な栄養素を得る" },
+      { "term": "organ", "sentence": "our muscles and organs", "jp": "私たちの筋肉と臓器" },
+      { "term": "properly", "sentence": "flow properly", "jp": "ちゃんと流れる" },
+      { "term": "separate", "sentence": "separate the nutrients from the waste", "jp": "栄養素を廃棄物から分離する" },
+      { "term": "skin", "sentence": "keeps our skin strong", "jp": "私たちの皮膚を丈夫に保つ" },
+      { "term": "survive", "sentence": "needs water to survive", "jp": "生存するためには水が必要だ" },
+      { "term": "thick", "sentence": "too thick to flow", "jp": "流れるにはどろどろすぎる" },
+      { "term": "tiny", "sentence": "tiny veins", "jp": "とても小さな静脈" },
+      { "term": "waste", "sentence": "separate the nutrients from the waste", "jp": "栄養素を廃棄物から分離する" }
+    ],
+    "Lesson 4": [
+      { "term": "appliance", "sentence": "all the appliances", "jp": "すべての家電製品" },
+      { "term": "cooking", "sentence": "Grandma's irreplaceable cooking", "jp": "おばあさんのかけがえのない料理" },
+      { "term": "figure out", "sentence": "figure out the rest", "jp": "その残りは理解しました" },
+      { "term": "float", "sentence": "floating in it", "jp": "その中で浮かんでいる" },
+      { "term": "gadget", "sentence": "many gadgets", "jp": "たくさんの道具" },
+      { "term": "glow", "sentence": "glowed orange", "jp": "オレンジ色に輝いた" },
+      { "term": "irreplaceable", "sentence": "Grandma's irreplaceable cooking", "jp": "おばあさんのかけがえのない料理" },
+      { "term": "odorless", "sentence": "The gel is odorless.", "jp": "そのゲルは無臭です" },
+      { "term": "panel", "sentence": "a panel slid open", "jp": "1つの板が滑るように開いた" },
+      { "term": "pull out", "sentence": "pulled out a sausage", "jp": "ソーセージを1つ取り出した" },
+      { "term": "reveal", "sentence": "revealing hanging pots and pans", "jp": "壁にかけられたポットと鍋が姿を現しながら" },
+      { "term": "shelf [shelves]", "sentence": "on a shelf", "jp": "棚の上に" },
+      { "term": "slide [slid]", "sentence": "a panel slid open", "jp": "1つの板が滑るように開いた" },
+      { "term": "stay away", "sentence": "stay away from this kitchen", "jp": "この台所から離れていなさい" },
+      { "term": "straight", "sentence": "went straight", "jp": "まっすぐ行った" }
+    ],
+    "Lesson 5": [
+      { "term": "allow", "sentence": "allow computers to become even smaller", "jp": "コンピューターをより一層小さくしてくれる" },
+      { "term": "connection", "sentence": "What's the connection?", "jp": "どんな関連性があるのでしょう？" },
+      { "term": "create", "sentence": "create the solutions", "jp": "解決策を生み出す" },
+      { "term": "deal with", "sentence": "deals with saving energy", "jp": "エネルギーの節約を扱う" },
+      { "term": "device", "sentence": "energy storage devices", "jp": "エネルギーを保存する装置" },
+      { "term": "electricity", "sentence": "store electricity", "jp": "電気を保存する" },
+      { "term": "frame", "sentence": "in the frames", "jp": "メガネフレームの中に" },
+      { "term": "inexpensive", "sentence": "inexpensive insulation", "jp": "安い断熱材" },
+      { "term": "insulation", "sentence": "inexpensive insulation", "jp": "安い断熱材" },
+      { "term": "man-made", "sentence": "man-made nano-materials", "jp": "人が作り出したナノ物質" },
+      { "term": "pass through", "sentence": "keeping air from passing through", "jp": "空気が通過するのを防ぐ" },
+      { "term": "promising", "sentence": "promising nanotechnology research", "jp": "有望なナノテクノロジーの研究" },
+      { "term": "save", "sentence": "saves energy and money", "jp": "エネルギーとお金を節約する" },
+      { "term": "storage", "sentence": "energy storage", "jp": "エネルギーを保存する" },
+      { "term": "temperature", "sentence": "maintain temperatures", "jp": "温度を維持する" }
+    ],
+    "Lesson 6": [
+      { "term": "advanced", "sentence": "the most advanced shoe", "jp": "最も進歩した靴" },
+      { "term": "arch", "sentence": "arch", "jp": "土踏まず" },
+      { "term": "brand new", "sentence": "some brand new shoes", "jp": "いくつかの真新しい靴" },
+      { "term": "combine", "sentence": "combines the natural feel with added protection", "jp": "自然な感覚と保護する機能を兼ね備えている" },
+      { "term": "extra", "sentence": "at no extra charge", "jp": "追加料金なし" },
+      { "term": "fit ... like a glove", "sentence": "fits your foot like a glove", "jp": "あつらえたよう（手袋のように）にあなたの足にぴったり合う" },
+      { "term": "last", "sentence": "lasts for one week", "jp": "1週間続けられる" },
+      { "term": "material", "sentence": "mesh material", "jp": "メッシュ素材" },
+      { "term": "metal", "sentence": "metal springs", "jp": "金属スプリング" },
+      { "term": "protection", "sentence": "protection from scrapes and cuts", "jp": "すり傷と切り傷から保護" },
+      { "term": "run out", "sentence": "until supplies run out", "jp": "供給品が品切れになるまで" },
+      { "term": "sale", "sentence": "sale", "jp": "割引販売、バーゲン" },
+      { "term": "shock", "sentence": "shock absorption", "jp": "衝撃吸収" },
+      { "term": "supply", "sentence": "until supplies run out", "jp": "供給品が品切れになるまで" },
+      { "term": "vest", "sentence": "bulletproof vests", "jp": "防弾チョッキ" }
+    ]
+  },
+  "Other": {
+    "Sample Lesson": [
+         { "term": "example", "sentence": "This is an example", "jp": "これは例です" }
+    ]
+  }
+};
