@@ -105,7 +105,120 @@ window.WORD_DATA = {
   },
   "Other": {
     "Sample Lesson": [
-         { "term": "example", "sentence": "This is an example", "jp": "これは例です" }
+      { "term": "example", "sentence": "This is an example", "jp": "これは例です" }
+    ]
+  },
+  "Sprout 3 B3": {
+    "Lesson 1": [
+      { "term": "attract", "sentence": "attract some materials", "jp": "いくつかの物質を引き付ける" },
+      { "term": "crawl", "sentence": "crawled toward the shed", "jp": "倉庫へ向かって這って行った" },
+      { "term": "drawer", "sentence": "checked a drawer", "jp": "引き出しを調べる" },
+      { "term": "from side to side", "sentence": "sweeping the magnet from side to side", "jp": "磁石を左右に掃くように動かしながら" },
+      { "term": "iron", "sentence": "like iron", "jp": "鉄のような" },
+      { "term": "magnet", "sentence": "found a magnet", "jp": "磁石を見つけた" },
+      { "term": "marked", "sentence": "a drawer marked “screws”", "jp": "「ネジ」と表示された引き出し" },
+      { "term": "material", "sentence": "magnetic materials", "jp": "磁気のある物質" },
+      { "term": "missing", "sentence": "the missing screw", "jp": "なくなったネジ" },
+      { "term": "reach for", "sentence": "reached for the screw", "jp": "ネジを取ろうと手を伸ばした" },
+      { "term": "retrace", "sentence": "retraced their steps", "jp": "彼等の足取りを振り返る" },
+      { "term": "screw", "sentence": "need another screw", "jp": "ネジがもう1つ必要だ" },
+      { "term": "stick [stuck]", "sentence": "several screws stuck to it", "jp": "それについているいくつかのネジ" },
+      { "term": "sweep", "sentence": "sweeping the magnet", "jp": "磁石を掃くように動かしながら" },
+      { "term": "tool shed", "sentence": "to the tool shed", "jp": "工具倉庫へ" }
+    ],
+    "Lesson 2": [
+      { "term": "affect", "sentence": "affect the electronics of a refrigerator", "jp": "冷蔵庫の電子装置に影響を及ぼす" },
+      { "term": "bill", "sentence": "the electricity bill", "jp": "電気料金" },
+      { "term": "clear", "sentence": "clear some space", "jp": "空間を少しあけて" },
+      { "term": "collection", "sentence": "had a large collection", "jp": "収集物をたくさん持っていた" },
+      { "term": "cover", "sentence": "was covered with them", "jp": "それらで覆われていた" },
+      { "term": "electricity", "sentence": "the electricity bill", "jp": "電気代" },
+      { "term": "fascinated", "sentence": "became fascinated", "jp": "魅せられた" },
+      { "term": "fridge", "sentence": "on the fridge", "jp": "冷蔵庫の上に" },
+      { "term": "increase", "sentence": "increases the electricity bill", "jp": "電気代を上げる" },
+      { "term": "plead", "sentence": "She pleaded.", "jp": "彼女は哀願した" },
+      { "term": "powerful", "sentence": "uses a much more powerful magnet", "jp": "より一層強力な磁石を利用する" },
+      { "term": "space", "sentence": "clear some space", "jp": "空間を少しあけて" },
+      { "term": "waste", "sentence": "wasted power", "jp": "電気を浪費した" },
+      { "term": "weak", "sentence": "too small and weak", "jp": "とても小さくて弱い" },
+      { "term": "whole", "sentence": "the whole fridge", "jp": "冷蔵庫全体" }
+    ],
+    "Lesson 3": [
+      { "term": "ability", "sentence": "their ability to return to specific places", "jp": "特定の場所へ戻ってくる彼等の能力" },
+      { "term": "beak", "sentence": "in their beaks", "jp": "彼等のくちばしの中に" },
+      { "term": "conduct", "sentence": "conduct a study", "jp": "研究を行う" },
+      { "term": "convince", "sentence": "convinced many scientists", "jp": "多くの科学者を確信させた" },
+      { "term": "experiment", "sentence": "a series of experiments", "jp": "一連の実験" },
+      { "term": "limit", "sentence": "limited the pigeons’ ability", "jp": "ハトの能力を制限した" },
+      { "term": "magnetic field", "sentence": "recognize magnetic fields", "jp": "磁場を認知する" },
+      {
+        "term": "magnetized", "sentence": "tiny, magnetized particles",
+        "jp": "とても小さい磁気を帯びた粒子"
+      },
+      { "term": "migratory", "sentence": "certain migratory birds", "jp": "ある渡り鳥" },
+      { "term": "particle", "sentence": "tiny, magnetized particles", "jp": "とても小さい磁気を帯びた粒子" },
+      { "term": "recognize", "sentence": "recognize magnetic fields", "jp": "磁場を認知する" },
+      { "term": "rule out", "sentence": "rule out smell as a factor", "jp": "要因として匂いを除く" },
+      { "term": "sense", "sentence": "sense magnetic fields", "jp": "磁場を感知する" },
+      { "term": "smell", "sentence": "use smell", "jp": "匂いを利用する" },
+      { "term": "tiny", "sentence": "tiny, magnetized particles", "jp": "とても小さい磁気を帯びた粒子" }
+    ],
+    "Lesson 4": [
+      { "term": "bend over [bent over]", "sentence": "bent over in a field", "jp": "野原で前かがみになった" },
+      { "term": "choice", "sentence": "Millet’s choice", "jp": "ミレーの選択" },
+      { "term": "controversial", "sentence": "very controversial", "jp": "とても論争の的になる" },
+      { "term": "drag", "sentence": "dragged Olga", "jp": "Olgaを連れ回した" },
+      { "term": "exhibition", "sentence": "the art exhibition", "jp": "美術展覧会" },
+      { "term": "farming", "sentence": "poor farming women", "jp": "貧しい農村の女性たち" },
+      { "term": "gently", "sentence": "touched Olga’s shoulder gently", "jp": "Olgaの肩をやさしく触った" },
+      { "term": "grain", "sentence": "gathering grain", "jp": "穀物を集めながら" },
+      { "term": "hang [hung]", "sentence": "hung her head", "jp": "彼女は頭をうなだれた" },
+      { "term": "look up", "sentence": "looked up The Gleaners", "jp": "「落穂拾い」を調べてみた" },
+      { "term": "lower class", "sentence": "support for the lower classes", "jp": "下級階級のための支持" },
+      { "term": "opposite", "sentence": "in the opposite direction", "jp": "反対の方向へ" },
+      { "term": "paper", "sentence": "wrote a paper", "jp": "論文を書いた" },
+      {
+        "term": "sigh", "sentence": "sighed deeply",
+        "jp": "深いため息をついた"
+      },
+      { "term": "support", "sentence": "support for the lower classes", "jp": "下級階級のための支持" }
+    ],
+    "Lesson 5": [
+      { "term": "bake", "sentence": "bake the pieces at 170°C", "jp": "それらを170度で焼く" },
+      { "term": "bite-sized", "sentence": "bite-sized triangles", "jp": "ひと口サイズの三角形のもの" },
+      { "term": "corn flour", "sentence": "mix corn flour and water", "jp": "トウモロコシの粉と水を混ぜる" },
+      { "term": "crunchy", "sentence": "a crunchy snack", "jp": "パリパリと音をたてるお菓子" },
+      { "term": "dough", "sentence": "make dough", "jp": "生地を作る" },
+      { "term": "flat", "sentence": "roll them flat", "jp": "それらを平たく伸ばす" },
+      { "term": "golden", "sentence": "golden brown", "jp": "金色に光る茶色" },
+      { "term": "greased", "sentence": "a greased baking pan", "jp": "油をひいた焼き型" },
+      { "term": "heat", "sentence": "heat them", "jp": "それらを加熱する" },
+      { "term": "mix", "sentence": "mix corn flour and water", "jp": "トウモロコシの粉と水を混ぜる" },
+      { "term": "originate", "sentence": "originated in Latin America", "jp": "ラテンアメリカに由来した" },
+      { "term": "plastic wrap", "sentence": "two pieces of plastic wrap", "jp": "2つのビニールラップ" },
+      { "term": "roll", "sentence": "roll them flat", "jp": "それらを平たく伸ばす" },
+      { "term": "sprinkle", "sentence": "sprinkle them with salt", "jp": "それらに塩を振りかける" },
+      { "term": "sticky", "sentence": "too sticky", "jp": "とてもべとつく" }
+    ],
+    "Lesson 6": [
+      { "term": "braided", "sentence": "tightly braided", "jp": "堅く編まれた" },
+      { "term": "bundle", "sentence": "tight bundles", "jp": "堅い束" },
+      { "term": "digest", "sentence": "easily digest it", "jp": "それを容易に消化する" },
+      { "term": "flexible", "sentence": "sturdy and flexible", "jp": "丈夫で伸縮性のある" },
+      { "term": "harvest", "sentence": "harvest grains", "jp": "穀物を収穫する" },
+      { "term": "last", "sentence": "last for up to 50 years", "jp": "最大50年まで持続する" },
+      { "term": "leave [left]", "sentence": "are left with straw", "jp": "わらだけ残っている" },
+      { "term": "rope", "sentence": "like rope", "jp": "縄のように" },
+      { "term": "shade", "sentence": "provide good shade", "jp": "良い日陰を提供する" },
+      { "term": "straw", "sentence": "are left with straw", "jp": "わらだけ残っている" },
+      { "term": "sturdy", "sentence": "sturdy and flexible", "jp": "丈夫で伸縮性のある" },
+      { "term": "tie", "sentence": "tie pieces of straw together", "jp": "わらをひとまとめに縛る" },
+      {
+        "term": "tight", "sentence": "tight bundles",
+        "jp": "堅い束"
+      },
+      { "term": "wearable", "sentence": "make wearable items", "jp": "身につけられるものをつくる" },
+      { "term": "woven", "sentence": "woven to make hats", "jp": "編んで帽子を作る" }
     ]
   }
 };
