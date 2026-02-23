@@ -680,10 +680,12 @@
         return [...set];
       }
       const set = new Set([b]);
+      // stem: drop trailing 'e' for -ing/-ed (include→includ, nudge→nudg)
+      const stem = b.endsWith('e') ? b.slice(0, -1) : b;
       if (!b.endsWith('s')) set.add(b + 's');
       if (!b.endsWith('es')) set.add(b + 'es');
-      if (!b.endsWith('ed')) set.add(b + 'ed');
-      if (!b.endsWith('ing')) set.add(b + 'ing');
+      if (!b.endsWith('ed')) { set.add(b + 'ed'); set.add(stem + 'ed'); }
+      if (!b.endsWith('ing')) { set.add(b + 'ing'); set.add(stem + 'ing'); }
       return [...set];
     }
 
@@ -700,19 +702,24 @@
       }
 
       // 2nd try (multi-word only): blank each word of the base term individually,
-      // in the order they appear in the sentence (handles "take better care of" etc.)
+      // in the order they appear in the sentence (handles "take better care of",
+      // "signed us all up" etc.). Each word is also tried with all its inflections.
       if (!replaced && multi) {
         const termWords = normalize(base).split(' ');
         let result = out;
         let allFound = true;
         for (const w of termWords) {
-          const re = new RegExp(`\\b${escapeRegExp(w)}\\b`, 'i');
-          if (re.test(result)) {
-            result = result.replace(re, '____');
-          } else {
-            allFound = false;
-            break;
+          const wordVariants = buildAcceptableAnswers(w).sort((a, b) => b.length - a.length);
+          let wordReplaced = false;
+          for (const wv of wordVariants) {
+            const re = new RegExp(`\\b${escapeRegExp(wv)}\\b`, 'i');
+            if (re.test(result)) {
+              result = result.replace(re, '____');
+              wordReplaced = true;
+              break;
+            }
           }
+          if (!wordReplaced) { allFound = false; break; }
         }
         if (allFound) { out = result; replaced = true; }
       }
