@@ -1,5 +1,5 @@
 window.WORD_DATA = {
-  "British Summer School": {
+  "Sprout 3 A1": {
     "Lesson 1": [
       { "term": "adventure", "sentence": "have had quite an adventure", "jp": "すごい冒険をした" },
       { "term": "bowl", "sentence": "handed Sparky's bowl", "jp": "Sparkyのボウル（鉢）を渡した" },
