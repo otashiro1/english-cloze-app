@@ -692,10 +692,31 @@
       const multi = countWords(base) > 1;
       const replacement = multi ? blanksFor(base) : '____';
       let out = sentence, replaced = false;
+
+      // 1st try: match the term (or its variants) as a contiguous phrase
       for (const v of variants) {
         const re = new RegExp(`\\b${escapeRegExp(v)}\\b`, 'i');
         if (re.test(out)) { out = out.replace(re, replacement); replaced = true; break; }
       }
+
+      // 2nd try (multi-word only): blank each word of the base term individually,
+      // in the order they appear in the sentence (handles "take better care of" etc.)
+      if (!replaced && multi) {
+        const termWords = normalize(base).split(' ');
+        let result = out;
+        let allFound = true;
+        for (const w of termWords) {
+          const re = new RegExp(`\\b${escapeRegExp(w)}\\b`, 'i');
+          if (re.test(result)) {
+            result = result.replace(re, '____');
+          } else {
+            allFound = false;
+            break;
+          }
+        }
+        if (allFound) { out = result; replaced = true; }
+      }
+
       if (!replaced) out = `${sentence} (${replacement})`;
       return { text: out, replaced };
     }
